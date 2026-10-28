@@ -1,0 +1,4 @@
+# Configuration Netlify du site Révéla (revela-motion.fr)
+# Site statique : aucune commande de build, Netlify publie le dossier site/.
+[build]
+  publish = "site"
