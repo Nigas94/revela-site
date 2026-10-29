@@ -118,7 +118,7 @@
     montrer('resultat', 'resultat-titre');
   });
 
-  // Méthode : apparition au défilement, puis lecture de la frise (35 s jouées en 6,5 s, une fois, avec pause et reprise).
+  // Méthode : apparition au défilement, puis lecture de la frise (35 s jouées en 6,5 s, avec pause et reprise).
   var methode = document.getElementById('methode');
   if(methode && !reduit && 'IntersectionObserver' in window){
     methode.classList.add('anim-prete');
@@ -135,7 +135,7 @@
     var bouton = anat.querySelector('[data-frise]');
     var durees = piste.getAttribute('data-durees').split(',').map(Number), debuts = [], total = 0;
     durees.forEach(function(d){ debuts.push(total); total += d; });
-    var LECTURE = 6500, t = 0, enCours = false, fini = false, manuel = false, deja = false, dernier = null, visible = false;
+    var LECTURE = 6500, t = 0, enCours = false, fini = false, manuel = false, dernier = null, visible = false;
     anat.classList.add('frise-prete');
     bouton.hidden = false;
 
@@ -175,12 +175,15 @@
     }
     segs.forEach(function(s, i){ s.addEventListener('click', function(){ aller(i); }); });
     legendes.forEach(function(l, i){ l.addEventListener('click', function(){ aller(i); }); });
+    // la frise repart du début chaque fois qu'on arrive dessus, et se remet à zéro quand on la quitte
     new IntersectionObserver(function(e){
-      visible = e[0].isIntersecting;
-      if(visible && !deja){ deja = true; lancer(); }
-      else if(!visible && enCours){ arreter(); }
-      else if(visible && !enCours && !fini && !manuel && deja){ lancer(); }
-    }, { threshold: .5 }).observe(anat);
+      var dedans = e[0].isIntersecting && e[0].intersectionRatio >= .3;
+      if(dedans === visible) return;
+      visible = dedans;
+      t = 0; fini = false; manuel = false;
+      if(visible){ lancer(); }
+      else { arreter(); anat.classList.remove('frise-lecture'); afficher(); }
+    }, { threshold: [0, .3] }).observe(anat);
     afficher();
   }
 
