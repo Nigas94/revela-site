@@ -61,7 +61,8 @@
 </header>
 
 <main>
-  <section class="hero" id="haut">
+  <section class="hero intro-scroll" id="haut" data-intro>
+  <div class="intro-scene">
     <div class="scene" aria-hidden="true">
       <div class="halo"></div>
       <div class="faisceau"><div class="cone"></div></div>
@@ -82,6 +83,11 @@
       </svg>
     </div>
 
+    <div class="intro-accroche" aria-hidden="true">
+      <p class="intro-question">Vos clients comprennent vraiment <em class="accent">ce que vous vendez&nbsp;?</em></p>
+      <p class="intro-legende code">Un long texte, une photo figée… et vos prospects passent leur chemin.</p>
+    </div>
+
     <div class="wrap hero-in">
       <div class="hero-texte">
         <p class="surtitre">Studio de motion design</p>
@@ -94,21 +100,28 @@
         <p class="code formats">Format 9:16 · TikTok · Reels · Shorts</p>
       </div>
 
-      <!-- Vidéo de présentation : remplacer le bloc .ecran par
-           <video class="ecran" src="videos/presentation.mp4" poster="videos/presentation.jpg" controls playsinline preload="metadata"></video> -->
-      <figure class="telephone">
+      <figure class="telephone intro-tel">
         <div class="ecran ecran-hero">
-          <span class="ecran-nom">Révéla</span>
-          <span class="ecran-sous">Notre vidéo de présentation arrive ici très bientôt.</span>
-          <span class="lecture" aria-hidden="true"></span>
-          <div class="lecteur" aria-hidden="true">
-            <div class="lecteur-barre"><span></span></div>
-            <div class="lecteur-temps code"><span>00:00</span><span>00:35</span></div>
+          <div class="post-fige" aria-hidden="true">
+            <div class="post-fil">
+              <div class="post-tete"><span class="post-avatar"></span><span class="post-nom">votre_entreprise</span><span class="post-points">•••</span></div>
+              <div class="post-photo">
+                <img src="realisations/intro/avant.jpg" alt="" width="540" height="540" loading="lazy" decoding="async">
+              </div>
+              <p class="post-reactions">0 j'aime · 0 commentaire</p>
+              <p class="post-texte"><b>votre_entreprise</b> Découvrez notre nouveau produit, pensé avec soin pour répondre à tous vos besoins du quotidien. Grâce à ses nombreuses caractéristiques, à ses matériaux de qualité et à son design étudié, il vous accompagnera partout, au travail comme à la maison, été comme hiver, et bien plus encore… <span>plus</span></p>
+              <div class="post-tete post-suivant"><span class="post-avatar"></span><span class="post-ligne"></span></div>
+              <div class="post-photo post-vide"></div>
+            </div>
           </div>
+          <video class="intro-video" muted loop playsinline preload="none" poster="realisations/intro/revela-hero.jpg" aria-hidden="true" tabindex="-1"><source src="realisations/intro/revela-hero.mp4" type="video/mp4"></video>
         </div>
-        <figcaption><span>Vidéo de présentation</span><span class="code">1080 × 1920</span></figcaption>
+        <figcaption><span>Votre produit, expliqué</span><span class="code">9:16</span></figcaption>
       </figure>
     </div>
+
+    <p class="intro-defiler code" aria-hidden="true"><span></span>Faites défiler</p>
+  </div>
   </section>
 
   <section class="bande bande-ombre" id="constat">

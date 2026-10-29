@@ -264,6 +264,64 @@ h1 em,h2 em,.accent{
   .formules{gap:32px}
 }
 
+/* ---------- Accueil animé au défilement ---------- */
+.intro-accroche,.intro-defiler,.post-fige{display:none}
+.intro-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.intro-active{height:250vh;height:250svh;margin-top:calc(-1 * var(--h-entete,72px))}
+.intro-active .intro-scene{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.intro-active .hero-in{height:100%;padding-block:calc(var(--h-entete,72px) + 24px) 32px;perspective:1300px}
+.intro-active .scene{top:var(--h-entete,72px)}
+.intro-active .faisceau,.intro-active .halo{animation:none;opacity:var(--flick,0)}
+.intro-active .lentille{animation:none;opacity:calc(.3 + .7 * var(--flick,0))}
+.intro-active .hero-texte{opacity:var(--c,0);transform:translateY(calc((1 - var(--c,0)) * 34px))}
+.intro-active .intro-tel{
+  position:relative;z-index:2;transform-origin:50% 50%;
+  transform:translate(calc(var(--dx,0px) * (1 - var(--c,0))),calc(var(--dy,0px) * (1 - var(--c,0))))
+    scale(calc(var(--s0,1) + (var(--s1,1) - var(--s0,1)) * var(--c,0)))
+    rotateX(calc(9deg * (1 - var(--c,0)))) rotateY(calc(-13deg * (1 - var(--c,0))));
+  box-shadow:0 40px 90px rgba(2,8,20,.55),0 0 calc(var(--flick,0) * 90px) rgba(212,175,55,.28);
+}
+.intro-active.mesure .intro-tel{transform:none}
+.intro-active .intro-tel figcaption{opacity:var(--c,0)}
+.intro-active .ecran-hero::before{opacity:var(--flick,0)}
+.intro-active .post-fige{display:block;position:absolute;inset:0;z-index:2;overflow:hidden;border-radius:inherit;
+  background:#12161d;color:#8b919c;text-align:left;padding:14px 12px;
+  opacity:calc(1 - var(--b,0) * 1.7);filter:blur(calc(var(--b,0) * 9px)) grayscale(1)}
+.intro-active .intro-video{z-index:1;opacity:calc((var(--b,0) - .35) * 2.4)}
+.post-fil{display:grid;gap:10px;transform:translateY(calc(var(--a,0) * -30%))}
+.post-tete{display:flex;align-items:center;gap:8px;font-size:.66rem;font-weight:500}
+.post-avatar{width:22px;height:22px;border-radius:50%;background:#2a2f39;flex:none}
+.post-points{margin-left:auto;letter-spacing:.1em}
+.post-photo{aspect-ratio:1;border-radius:6px;background:#1b2029;display:grid;place-items:center}
+.post-photo{overflow:hidden}
+.post-photo img{width:100%;height:100%;object-fit:cover}
+.post-reactions{font-size:.62rem;font-weight:500}
+.post-texte{font-size:.62rem;line-height:1.5}
+.post-texte span{color:#5f6672}
+.post-ligne{height:7px;width:46%;border-radius:4px;background:#232833}
+.post-vide{background:#191d25}
+.intro-active .intro-accroche{display:grid;justify-items:center;gap:10px;position:absolute;z-index:3;left:0;right:0;
+  top:calc(var(--h-entete,72px) + clamp(8px,3vh,32px));padding-inline:16px;text-align:center;pointer-events:none}
+.intro-question{font-size:clamp(1.35rem,1rem + 1.7vw,2.3rem);font-weight:300;line-height:1.2;max-width:24ch;text-wrap:balance;
+  opacity:calc(1 - var(--b,0) * 2.2);transform:translateY(calc(var(--b,0) * -24px))}
+.intro-legende{max-width:44ch;opacity:min(calc(var(--a,0) * 2.6 - .4),calc(1 - var(--b,0) * 2.2))}
+.intro-active .intro-defiler{display:flex;flex-direction:column;align-items:center;gap:10px;position:absolute;z-index:3;
+  left:50%;bottom:clamp(14px,3vh,30px);transform:translateX(-50%);opacity:calc(1 - var(--a,0) * 4);pointer-events:none}
+.intro-defiler span{width:1px;height:34px;background:linear-gradient(180deg,rgba(212,175,55,0),var(--or));
+  transform-origin:top;animation:defiler 1.8s ease-in-out infinite}
+@keyframes defiler{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+@media (max-width:899px){
+  .intro-active{height:220vh;height:220svh}
+  .intro-active .hero-in{display:block;position:relative;padding:0}
+  .intro-active .intro-tel{position:absolute;left:50%;top:50%;width:min(250px,62vw);margin:0;translate:-50% -50%;
+    opacity:max(.12,calc(1 - 1.5 * var(--c,0)))}
+  .intro-active .intro-tel figcaption{display:none}
+  .intro-active .intro-accroche{top:calc(var(--h-entete,72px) + 92px)}
+  .intro-active .hero-texte{position:absolute;z-index:3;left:0;right:0;top:50%;translate:0 -50%;
+    padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));
+    padding-top:calc(var(--h-entete,72px) + 24px);gap:20px}
+}
+
 /* ---------- Réalisations : carrousels tournants ---------- */
 .clients{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,3vw,40px)}
 .carrousel{

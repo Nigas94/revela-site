@@ -118,6 +118,71 @@
     montrer('resultat', 'resultat-titre');
   });
 
+  // Accueil animé au défilement : 1. le post figé défile, 2. le projecteur s'allume et l'écran devient une vidéo,
+  // 3. le téléphone prend sa place et le titre apparaît. Les étapes suivent le défilement (variables CSS --a, --b, --c).
+  var intro = document.querySelector('[data-intro]');
+  if(intro && !reduit){
+    var scene = intro.querySelector('.intro-scene'), tel = intro.querySelector('.intro-tel');
+    var video = intro.querySelector('.intro-video'), entete = document.querySelector('.entete');
+    var accroche = intro.querySelector('.intro-accroche'), texte = intro.querySelector('.hero-texte');
+    var visibleIntro = true, cFin = 0, attente = false;
+    intro.classList.add('intro-active');
+    var seg = function(p, d, f){ return Math.min(1, Math.max(0, (p - d) / (f - d))); };
+    var doux = function(t){ return t * t * (3 - 2 * t); };
+    // le scintillement de l'allumage, repris de l'animation du projecteur
+    var CLIGNE = [[0, 0], [.06, .55], [.1, .08], [.17, .8], [.23, .35], [.38, 1], [1, 1]];
+    function cligne(t){
+      for(var i = 1; i < CLIGNE.length; i++){
+        if(t <= CLIGNE[i][0]){ var a = CLIGNE[i - 1], b = CLIGNE[i]; return a[1] + (b[1] - a[1]) * (t - a[0]) / (b[0] - a[0]); }
+      }
+      return 1;
+    }
+    function mesurer(){
+      var mobile = window.innerWidth < 900;
+      intro.style.setProperty('--h-entete', entete.offsetHeight + 'px');
+      intro.classList.add('mesure');
+      var r = tel.getBoundingClientRect(), s = scene.getBoundingClientRect(), q = accroche.getBoundingClientRect();
+      intro.classList.remove('mesure');
+      // zone libre sous l'accroche pour le téléphone au départ
+      var haut = q.bottom + 20, bas = s.bottom - 64;
+      var s0 = Math.max(.5, Math.min(1.05, (bas - haut) / r.height));
+      intro.style.setProperty('--s0', s0.toFixed(3));
+      intro.style.setProperty('--s1', mobile ? '.88' : '1');
+      intro.style.setProperty('--dx', Math.round(s.left + s.width / 2 - (r.left + r.width / 2)) + 'px');
+      intro.style.setProperty('--dy', Math.round((haut + bas) / 2 - (r.top + r.height / 2)) + 'px');
+    }
+    function maj(){
+      attente = false;
+      var total = intro.offsetHeight - scene.offsetHeight;
+      var p = total > 0 ? Math.min(1, Math.max(0, -intro.getBoundingClientRect().top / total)) : 1;
+      var a = seg(p, 0, .3), b = seg(p, .3, .58), c = doux(seg(p, .58, .86));
+      cFin = c;
+      intro.style.setProperty('--a', a.toFixed(3));
+      intro.style.setProperty('--b', b.toFixed(3));
+      intro.style.setProperty('--c', c.toFixed(3));
+      intro.style.setProperty('--flick', cligne(b).toFixed(3));
+      if(video){
+        if(b > .3 && visibleIntro && !document.hidden){ var pr = video.play(); if(pr && pr.catch) pr.catch(function(){}); }
+        else {
+          if(!video.paused) video.pause();
+          if(b <= .3 && video.currentTime > 0) video.currentTime = 0;   // la gourde se redessine à chaque allumage
+        }
+      }
+    }
+    function demander(){ if(!attente){ attente = true; window.requestAnimationFrame(maj); } }
+    mesurer(); maj();
+    window.addEventListener('scroll', demander, { passive: true });
+    window.addEventListener('resize', function(){ mesurer(); demander(); });
+    document.addEventListener('visibilitychange', demander);
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(e){ visibleIntro = e[0].isIntersecting; demander(); }).observe(scene);
+    }
+    // au clavier, le titre et les boutons doivent être visibles : on saute à la fin de l'animation
+    texte.addEventListener('focusin', function(){
+      if(cFin < 1) window.scrollTo({ top: intro.offsetTop + intro.offsetHeight - window.innerHeight, behavior: 'auto' });
+    });
+  }
+
   // Carrousels des réalisations : un anneau de 4 vidéos par client, qui tourne tout seul.
   // Seule la vidéo du centre joue son aperçu (muet, 6 s) ; la suivante arrive à la fin de la barre de progression.
   var lecteur = document.getElementById('lecteur-video');
