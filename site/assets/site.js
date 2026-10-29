@@ -118,22 +118,143 @@
     montrer('resultat', 'resultat-titre');
   });
 
-  // Vidéos YouTube : sur le site en ligne, elles se chargent seulement au clic (mode confidentialité renforcée).
-  if(document.documentElement.getAttribute('data-embed') === 'youtube'){
-    document.querySelectorAll('a[data-youtube]').forEach(function(a){
-      a.setAttribute('aria-label', 'Lancer la vidéo « ' + a.dataset.titre + ' », chargée depuis YouTube');
-      a.addEventListener('click', function(e){
-        e.preventDefault();
-        var f = document.createElement('iframe');
-        f.className = 'ecran ecran-lecteur';
-        f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(a.dataset.youtube) + '?autoplay=1&playsinline=1&rel=0';
-        f.title = a.dataset.titre;
-        f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
-        f.setAttribute('allowfullscreen', '');
-        f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
-        a.replaceWith(f);
-        f.focus();
+  // Carrousels des réalisations : un anneau de 4 vidéos par client, qui tourne tout seul.
+  // Seule la vidéo du centre joue son aperçu (muet, 6 s) ; la suivante arrive à la fin de la barre de progression.
+  var lecteur = document.getElementById('lecteur-video');
+  var carrousels = [];
+  document.querySelectorAll('[data-carrousel]').forEach(function(box){
+    var anneau = box.querySelector('.anneau');
+    var cartes = Array.prototype.slice.call(anneau.children);
+    var n = cartes.length, idx = 0;
+    var num = box.querySelector('[data-num]'), annonce = box.querySelector('[data-annonce]');
+    var barre = box.querySelector('.progression span');
+    var bPause = box.querySelector('[data-pause]');
+    var etat = { pause: false, survol: false, focus: false, visible: false };
+
+    function arrete(){ return reduit || etat.pause || etat.survol || etat.focus || !etat.visible || document.hidden || (lecteur && lecteur.open); }
+    function apercus(){
+      cartes.forEach(function(c, i){
+        var v = c.querySelector('video');
+        if(!v) return;
+        if(i === idx && !reduit && !etat.pause && etat.visible && !document.hidden && !(lecteur && lecteur.open)){
+          v.muted = true;
+          var p = v.play();
+          if(p && p.catch) p.catch(function(){});
+        } else if(!v.paused){ v.pause(); }
       });
+    }
+    function maj(){
+      box.classList.toggle('arret', arrete());
+      apercus();
+    }
+    function relancer(){
+      if(reduit) return;
+      box.classList.remove('joue');
+      void barre.offsetWidth;            // relance l'animation de la barre
+      box.classList.add('joue');
+    }
+    function placer(nouveau, parUtilisateur){
+      idx = (nouveau + n) % n;
+      cartes.forEach(function(c, i){
+        var d = (i - idx + n) % n;
+        c.classList.remove('d-centre', 'd-droite', 'd-gauche', 'd-fond');
+        c.classList.add(d === 0 ? 'd-centre' : d === 1 ? 'd-droite' : d === n - 1 ? 'd-gauche' : 'd-fond');
+        if(d === 0) c.removeAttribute('aria-hidden'); else c.setAttribute('aria-hidden', 'true');
+        var lien = c.querySelector('a.ecran');
+        if(lien) lien.tabIndex = d === 0 ? 0 : -1;
+      });
+      num.textContent = (idx + 1 < 10 ? '0' : '') + (idx + 1);
+      if(parUtilisateur){
+        box.classList.remove('decale');
+        annonce.textContent = 'Vidéo ' + (idx + 1) + ' sur ' + n + ' : ' + cartes[idx].querySelector('.projet-titre').textContent;
+      }
+      relancer();
+      maj();
+    }
+
+    barre.addEventListener('animationend', function(){ box.classList.remove('decale'); placer(idx + 1, false); });
+    box.querySelector('[data-prec]').addEventListener('click', function(){ placer(idx - 1, true); });
+    box.querySelector('[data-suiv]').addEventListener('click', function(){ placer(idx + 1, true); });
+    bPause.addEventListener('click', function(){
+      etat.pause = !etat.pause;
+      bPause.setAttribute('aria-pressed', etat.pause ? 'true' : 'false');
+      bPause.setAttribute('aria-label', etat.pause ? 'Reprendre le défilement' : 'Mettre en pause le défilement');
+      maj();
+    });
+    // Pause pendant le survol à la souris et quand le clavier est dans le carrousel (pas après un simple toucher).
+    box.addEventListener('pointerenter', function(e){ if(e.pointerType === 'mouse'){ etat.survol = true; maj(); } });
+    box.addEventListener('pointerleave', function(e){ if(e.pointerType === 'mouse'){ etat.survol = false; maj(); } });
+    box.addEventListener('focusin', function(e){
+      var clavier = true;
+      try{ clavier = e.target.matches(':focus-visible'); }catch(err){}
+      if(clavier){ etat.focus = true; maj(); }
+    });
+    box.addEventListener('focusout', function(e){ if(!box.contains(e.relatedTarget)){ etat.focus = false; maj(); } });
+    box.addEventListener('keydown', function(e){
+      if(e.key === 'ArrowLeft'){ e.preventDefault(); placer(idx - 1, true); }
+      if(e.key === 'ArrowRight'){ e.preventDefault(); placer(idx + 1, true); }
+    });
+
+    // Glisser du doigt (ou de la souris) pour tourner ; un glissé n'ouvre pas la vidéo.
+    var x0 = null, y0 = 0, glisse = false;
+    anneau.addEventListener('pointerdown', function(e){ x0 = e.clientX; y0 = e.clientY; glisse = false; });
+    anneau.addEventListener('pointerup', function(e){
+      if(x0 === null) return;
+      var dx = e.clientX - x0, dy = e.clientY - y0;
+      x0 = null;
+      if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)){ glisse = true; placer(idx + (dx < 0 ? 1 : -1), true); }
+    });
+    anneau.addEventListener('pointercancel', function(){ x0 = null; });
+    anneau.addEventListener('dragstart', function(e){ e.preventDefault(); });
+    anneau.addEventListener('click', function(e){
+      var c = e.target.closest('.diapo');
+      if(!c) return;
+      if(glisse){ e.preventDefault(); glisse = false; return; }
+      var i = cartes.indexOf(c);
+      if(i !== idx){ e.preventDefault(); placer(i, true); return; }
+      var lien = c.querySelector('a[data-youtube]');
+      if(lien && lecteur && document.documentElement.getAttribute('data-embed') === 'youtube'){
+        e.preventDefault();
+        ouvrirVideo(lien);
+      }
+    });
+
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(entrees){
+        etat.visible = entrees[0].isIntersecting; maj();
+      }, { threshold: .35 }).observe(box);
+    } else { etat.visible = true; }
+    carrousels.push(maj);
+    placer(0, false);
+  });
+  document.addEventListener('visibilitychange', function(){ carrousels.forEach(function(f){ f(); }); });
+
+  // Sur le site en ligne, la vidéo complète se charge depuis YouTube seulement au clic (mode confidentialité renforcée).
+  var origine = null;
+  function ouvrirVideo(a){
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(a.dataset.youtube) + '?autoplay=1&playsinline=1&rel=0';
+    f.title = a.dataset.titre;
+    f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
+    f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    lecteur.querySelector('.lecteur-cadre').appendChild(f);
+    document.getElementById('lecteur-titre').textContent = 'Vidéo « ' + a.dataset.titre + ' »';
+    origine = a;
+    lecteur.showModal();
+    carrousels.forEach(function(m){ m(); });
+  }
+  if(lecteur){
+    if(document.documentElement.getAttribute('data-embed') === 'youtube'){
+      document.querySelectorAll('a[data-youtube]').forEach(function(a){
+        a.setAttribute('aria-label', 'Lancer la vidéo « ' + a.dataset.titre + ' », chargée depuis YouTube');
+      });
+    }
+    lecteur.querySelector('.lecteur-fermer').addEventListener('click', function(){ lecteur.close(); });
+    lecteur.addEventListener('click', function(e){ if(e.target === lecteur) lecteur.close(); });
+    lecteur.addEventListener('close', function(){
+      lecteur.querySelector('.lecteur-cadre').textContent = '';
+      carrousels.forEach(function(m){ m(); });
+      if(origine){ origine.focus(); origine = null; }
     });
   }
 
