@@ -226,6 +226,59 @@ h1 em,h2 em,.accent{
 .legende .cle span:last-child{color:var(--or-clair)}
 .legende b{font-family:var(--f-accent);font-style:italic;font-weight:600;font-size:1.15rem;color:var(--or);margin-right:.25em}
 
+/* ---------- Méthode : animations ---------- */
+#methode.anim-prete .tete > *{opacity:0;transform:translateY(22px);
+  transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--j,0) * .12s)}
+#methode.anim-prete .tete > :nth-child(2){--j:1}
+#methode.anim-prete .tete > :nth-child(3){--j:2}
+#methode.anim-prete .tete .surtitre::before{transform:scaleX(0);transform-origin:left center;transition:transform .9s .2s cubic-bezier(.2,.7,.2,1)}
+#methode.anim-prete .tete.vu > *{opacity:1;transform:none}
+#methode.anim-prete .tete.vu .surtitre::before{transform:none}
+#methode.anim-prete .trois li{position:relative}
+#methode.anim-prete .trois li:nth-child(2){--i:1}
+#methode.anim-prete .trois li:nth-child(3){--i:2}
+#methode.anim-prete .trois li::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;background:var(--dore);
+  transform:scaleX(0);transform-origin:left center;transition:transform 1.1s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0) * .2s)}
+#methode.anim-prete .trois li > *{opacity:0;transform:translateY(18px);
+  transition:opacity .7s ease,transform .8s cubic-bezier(.2,.7,.2,1),color .4s ease,filter .5s ease;
+  transition-delay:calc(var(--i,0) * .2s + var(--j,0) * .1s + .25s)}
+#methode.anim-prete .trois li > :nth-child(2){--j:1}
+#methode.anim-prete .trois li > :nth-child(3){--j:2}
+#methode.anim-prete .trois .chiffre{transform:translateY(26px) scale(.86);filter:blur(6px)}
+#methode.anim-prete .trois.vu li::before{transform:none}
+#methode.anim-prete .trois.vu li > *{opacity:1;transform:none;filter:none}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  #methode.anim-prete .chiffre{
+    background-image:linear-gradient(100deg,var(--or-sombre) 0%,var(--or) 28%,#FFF4CF 50%,var(--or) 72%,var(--or-sombre) 100%);
+    background-size:300% 100%;background-position:100% 0}
+  #methode.anim-prete .trois.vu .chiffre{animation:brille 1.6s ease-in-out forwards;animation-delay:calc(var(--i,0) * .2s + .6s)}
+}
+@keyframes brille{to{background-position:0 0}}
+#methode.anim-prete .trois li.actif .chiffre{filter:drop-shadow(0 0 18px rgba(241,215,138,.55))}
+#methode.anim-prete .trois li.actif h3{color:var(--or-clair)}
+#methode.anim-prete .trois li.actif::before{box-shadow:0 0 12px rgba(241,215,138,.7)}
+
+.piste-zone{position:relative}
+.tete-lecture,.frise-bouton[hidden]{display:none}
+.frise-prete .frise-bouton{margin-left:auto}
+.frise-prete .piste-zone{margin-top:16px}
+.frise-prete .tete-lecture{display:block;position:absolute;top:-7px;bottom:-7px;left:calc(var(--t,0) * 100%);width:2px;margin-left:-1px;
+  border-radius:2px;background:var(--or-clair);box-shadow:0 0 14px rgba(241,215,138,.85);pointer-events:none;
+  opacity:0;transition:opacity .4s ease}
+.frise-lecture .tete-lecture{opacity:1}
+.bulle-lecture{position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);padding:2px 8px;border-radius:999px;
+  background:var(--or-clair);color:var(--nuit);font-size:.66rem;white-space:nowrap}
+.frise-prete .seg{cursor:pointer;transition:opacity .45s ease,filter .45s ease}
+.frise-prete .seg:not(.allume){opacity:.22;filter:grayscale(1)}
+.frise-prete .seg.actif{filter:brightness(1.22) saturate(1.15)}
+.frise-prete .legende li{cursor:pointer;transition:opacity .45s ease}
+.frise-prete .legende li:not(.passe){opacity:.38}
+.frise-prete .legende li::after{content:"";width:28px;height:2px;margin-top:4px;border-radius:2px;background:var(--dore);
+  transform:scaleX(0);transform-origin:left center;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.frise-prete .legende li.actif::after{transform:none}
+.frise-prete .legende li.actif span:last-child{color:var(--creme)}
+.frise-prete .legende li.cle.actif span:last-child{color:var(--or-clair)}
+@media (max-width:520px){.graduation .grad:nth-last-child(2){display:none}}
 /* ---------- Formats ---------- */
 .services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(28px,4vw,48px)}
 .services article{display:grid;align-content:start;gap:12px;padding-top:22px;border-top:1px solid var(--trait);min-width:0}

@@ -118,6 +118,72 @@
     montrer('resultat', 'resultat-titre');
   });
 
+  // Méthode : apparition au défilement, puis lecture de la frise (35 s jouées en 6,5 s, une fois, avec pause et reprise).
+  var methode = document.getElementById('methode');
+  if(methode && !reduit && 'IntersectionObserver' in window){
+    methode.classList.add('anim-prete');
+    var apparition = new IntersectionObserver(function(entrees){
+      entrees.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('vu'); apparition.unobserve(e.target); } });
+    }, { threshold: .25 });
+    methode.querySelectorAll('.tete, .trois').forEach(function(el){ apparition.observe(el); });
+
+    var anat = methode.querySelector('.anatomie'), piste = anat.querySelector('.piste');
+    var segs = Array.prototype.slice.call(piste.children);
+    var legendes = Array.prototype.slice.call(anat.querySelectorAll('.legende li'));
+    var colonnes = Array.prototype.slice.call(methode.querySelectorAll('.trois li'));
+    var zone = anat.querySelector('.piste-zone'), bulle = anat.querySelector('.bulle-lecture');
+    var bouton = anat.querySelector('[data-frise]');
+    var durees = piste.getAttribute('data-durees').split(',').map(Number), debuts = [], total = 0;
+    durees.forEach(function(d){ debuts.push(total); total += d; });
+    var LECTURE = 6500, t = 0, enCours = false, fini = false, manuel = false, deja = false, dernier = null, visible = false;
+    anat.classList.add('frise-prete');
+    bouton.hidden = false;
+
+    function indice(){ for(var i = debuts.length - 1; i >= 0; i--){ if(t >= debuts[i]) return i; } return 0; }
+    function afficher(){
+      var k = fini ? -1 : indice();
+      zone.style.setProperty('--t', (t / total).toFixed(4));
+      bulle.textContent = Math.min(total, Math.floor(t)) + ' s';
+      segs.forEach(function(s, i){ s.classList.toggle('allume', fini || t >= debuts[i]); s.classList.toggle('actif', i === k); });
+      legendes.forEach(function(l, i){ l.classList.toggle('passe', fini || t >= debuts[i]); l.classList.toggle('actif', i === k); });
+      // les segments 1, 2 et 3 de la frise font briller la colonne correspondante
+      colonnes.forEach(function(c, j){ c.classList.toggle('actif', k === 3 + j); });
+    }
+    function libelle(){ bouton.textContent = enCours ? 'Pause' : (fini ? 'Rejouer la frise' : 'Reprendre'); }
+    function boucle(ts){
+      if(!enCours) return;
+      if(dernier !== null) t += (ts - dernier) / LECTURE * total;
+      dernier = ts;
+      if(t >= total){ t = total; fini = true; enCours = false; anat.classList.remove('frise-lecture'); libelle(); }
+      afficher();
+      if(enCours) window.requestAnimationFrame(boucle);
+    }
+    function lancer(){
+      if(fini){ t = 0; fini = false; }
+      enCours = true; dernier = null;
+      anat.classList.add('frise-lecture');
+      libelle();
+      window.requestAnimationFrame(boucle);
+    }
+    function arreter(){ enCours = false; libelle(); }
+    bouton.addEventListener('click', function(){ if(enCours){ arreter(); manuel = true; } else { manuel = false; lancer(); } });
+    function aller(i){
+      arreter(); manuel = true; fini = false;
+      t = debuts[i] + durees[i] / 2;
+      anat.classList.add('frise-lecture');
+      afficher(); libelle();
+    }
+    segs.forEach(function(s, i){ s.addEventListener('click', function(){ aller(i); }); });
+    legendes.forEach(function(l, i){ l.addEventListener('click', function(){ aller(i); }); });
+    new IntersectionObserver(function(e){
+      visible = e[0].isIntersecting;
+      if(visible && !deja){ deja = true; lancer(); }
+      else if(!visible && enCours){ arreter(); }
+      else if(visible && !enCours && !fini && !manuel && deja){ lancer(); }
+    }, { threshold: .5 }).observe(anat);
+    afficher();
+  }
+
   // Accueil animé au défilement : 1. le post figé défile, 2. le projecteur s'allume et l'écran devient une vidéo,
   // 3. le téléphone prend sa place et le titre apparaît. Les étapes suivent le défilement (variables CSS --a, --b, --c).
   var intro = document.querySelector('[data-intro]');
