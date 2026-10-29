@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr" data-embed="youtube">
+<html lang="fr" data-embed="youtube" data-form="netlify">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -395,8 +395,11 @@
         </dl>
       </div>
 
-      <form class="formulaire" id="form-devis" method="post" novalidate>
-        <h3>Préparer votre demande</h3>
+      <form class="formulaire" id="form-devis" name="devis" method="POST" action="/merci.html" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="devis">
+        <input type="hidden" name="explications" value="">
+        <p hidden><label>Ne remplissez pas ce champ : <input type="text" name="bot-field"></label></p>
+        <h3>Envoyer votre demande</h3>
         <p class="note">Les champs marqués <span class="requis">*</span> sont obligatoires pour que nous puissions vous répondre.</p>
         <div class="deux">
           <div class="champ">
@@ -436,17 +439,28 @@
           <label for="f-message">Votre message <span class="aide">(facultatif)</span></label>
           <textarea id="f-message" name="message" rows="3" placeholder="Pour quel réseau, quelle date de lancement, quelle idée vous avez déjà…"></textarea>
         </div>
-        <div class="champ">
-          <label for="f-contact">Votre e-mail ou téléphone, pour vous répondre <span class="requis" aria-hidden="true">*</span></label>
-          <input type="text" id="f-contact" aria-required="true" name="contact" autocomplete="email" placeholder="camille@exemple.fr">
-          <p class="erreur" id="f-contact-err" hidden></p>
+        <div class="deux">
+          <div class="champ">
+            <label for="f-email">Votre e-mail <span class="requis" aria-hidden="true">*</span></label>
+            <input type="email" id="f-email" aria-required="true" name="email" autocomplete="email" inputmode="email" placeholder="camille@exemple.fr">
+            <p class="erreur" id="f-email-err" hidden></p>
+          </div>
+          <div class="champ">
+            <label for="f-tel">Votre téléphone <span class="aide">(facultatif)</span></label>
+            <input type="tel" id="f-tel" name="telephone" autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78">
+          </div>
         </div>
-        <button type="submit" class="btn btn-or">Préparer ma demande</button>
-        <p class="mention-rgpd">Ce formulaire n'envoie aucune donnée au site. Il prépare un message que vous envoyez vous-même depuis votre messagerie. Révéla utilise ces informations uniquement pour répondre à votre demande de devis, et les conserve au plus 3 ans après votre dernier contact. Pour y accéder, les corriger ou les faire supprimer, écrivez à revela.motion@gmail.com. <a href="confidentialite.html">En savoir plus sur vos données</a></p>
+        <button type="submit" class="btn btn-or">Envoyer ma demande</button>
+        <p class="mention-rgpd">Votre demande est envoyée à Révéla par l'hébergeur du site, Netlify. Révéla utilise ces informations uniquement pour répondre à votre demande de devis, et les conserve au plus 3 ans après votre dernier contact. Pour y accéder, les corriger ou les faire supprimer, écrivez à revela.motion@gmail.com. <a href="confidentialite.html">En savoir plus sur vos données</a></p>
+
+        <div class="resultat resultat-ok" id="envoye" hidden>
+          <p class="resultat-titre" id="envoye-titre" tabindex="-1">Merci, votre demande est bien envoyée.</p>
+          <p>Révéla vous répond à l'adresse e-mail que vous avez indiquée.</p>
+        </div>
 
         <div class="resultat" id="resultat" hidden aria-live="polite">
           <p class="resultat-titre" id="resultat-titre" tabindex="-1">Votre demande est prête.</p>
-          <p>Copiez-la et envoyez-la à <b>revela.motion@gmail.com</b>, ou ouvrez directement votre messagerie.</p>
+          <p id="resultat-texte">Copiez-la et envoyez-la à <b>revela.motion@gmail.com</b>, ou ouvrez directement votre messagerie.</p>
           <textarea id="f-apercu" readonly aria-label="Texte de votre demande"></textarea>
           <div class="actions">
             <button type="button" class="btn btn-or btn-petit" id="b-copier-demande">Copier le message</button>

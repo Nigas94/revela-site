@@ -34,14 +34,17 @@
   var obligatoires = [
     ['f-nom', 'Indiquez votre nom.'],
     ['f-offre', 'Décrivez en quelques mots le produit ou le service à présenter.'],
-    ['f-contact', 'Indiquez un e-mail ou un téléphone pour que nous puissions vous répondre.']
+    ['f-email', 'Indiquez votre adresse e-mail pour que nous puissions vous répondre.']
   ];
+  var MESSAGE_EMAIL = 'Indiquez une adresse e-mail valide, par exemple camille@exemple.fr.';
   function val(id){ return document.getElementById(id).value.trim(); }
+  function emailValide(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
 
   obligatoires.forEach(function(o){
     document.getElementById(o[0]).addEventListener('input', function(){
       var err = document.getElementById(o[0] + '-err');
-      if(this.value.trim()){ this.setAttribute('aria-invalid', 'false'); err.hidden = true; }
+      var ok = this.value.trim() && (o[0] !== 'f-email' || emailValide(this.value.trim()));
+      if(ok){ this.setAttribute('aria-invalid', 'false'); err.hidden = true; }
     });
   });
 
@@ -50,12 +53,13 @@
     var premier = null;
     obligatoires.forEach(function(o){
       var el = document.getElementById(o[0]), err = document.getElementById(o[0] + '-err');
-      var vide = !el.value.trim();
-      el.setAttribute('aria-invalid', vide ? 'true' : 'false');
+      var v = el.value.trim();
+      var message = !v ? o[1] : (o[0] === 'f-email' && !emailValide(v) ? MESSAGE_EMAIL : '');
+      el.setAttribute('aria-invalid', message ? 'true' : 'false');
       el.setAttribute('aria-describedby', o[0] + '-err');
-      err.textContent = vide ? o[1] : '';
-      err.hidden = !vide;
-      if(vide && !premier) premier = el;
+      err.textContent = message;
+      err.hidden = !message;
+      if(message && !premier) premier = el;
     });
     if(premier){ premier.focus(); return; }
 
@@ -70,17 +74,48 @@
     if(sel.value) lignes.push('Formule qui m\'intéresse : ' + sel.options[sel.selectedIndex].text);
     if(questions.length) lignes.push('La vidéo doit expliquer : ' + questions.join(', '));
     if(val('f-message')) lignes.push('', val('f-message'));
-    lignes.push('', 'Me répondre : ' + val('f-contact'), '', 'Merci !');
+    lignes.push('', 'Me répondre : ' + val('f-email') + (val('f-tel') ? ' · ' + val('f-tel') : ''), '', 'Merci !');
 
     var corps = lignes.join('\n');
     var sujet = 'Demande de devis Révéla · ' + (val('f-entreprise') || val('f-nom'));
     document.getElementById('f-apercu').value = corps;
     document.getElementById('b-mail').href = 'mailto:revela.motion@gmail.com?subject=' + encodeURIComponent(sujet) + '&body=' + encodeURIComponent(corps);
 
-    var res = document.getElementById('resultat');
-    res.hidden = false;
-    res.scrollIntoView({ behavior: reduit ? 'auto' : 'smooth', block: 'nearest' });
-    document.getElementById('resultat-titre').focus({ preventScroll: true });
+    function montrer(id, titreId){
+      var bloc = document.getElementById(id);
+      bloc.hidden = false;
+      bloc.scrollIntoView({ behavior: reduit ? 'auto' : 'smooth', block: 'nearest' });
+      document.getElementById(titreId).focus({ preventScroll: true });
+    }
+
+    // Site en ligne : la demande part directement chez Révéla (Netlify Forms).
+    if(document.documentElement.getAttribute('data-form') === 'netlify'){
+      var bouton = form.querySelector('button[type=submit]');
+      var libelle = bouton.textContent;
+      bouton.disabled = true; bouton.textContent = 'Envoi en cours…';
+      document.getElementById('resultat').hidden = true;
+      var donnees = new URLSearchParams(new FormData(form));
+      donnees.delete('explications');
+      donnees.set('explications', questions.join(', ') || 'Non précisé');
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: donnees.toString()
+      }).then(function(r){
+        if(!r.ok) throw new Error('HTTP ' + r.status);
+        form.querySelectorAll('input:not([type=hidden]):not([type=checkbox]), textarea, select').forEach(function(c){ c.value = ''; });
+        bouton.textContent = 'Demande envoyée';
+        montrer('envoye', 'envoye-titre');
+      }).catch(function(){
+        bouton.disabled = false; bouton.textContent = libelle;
+        document.getElementById('resultat-titre').textContent = "L'envoi n'a pas fonctionné.";
+        document.getElementById('resultat-texte').textContent = 'Votre demande est prête ci-dessous : copiez-la et envoyez-la à revela.motion@gmail.com, ou réessayez dans un instant.';
+        montrer('resultat', 'resultat-titre');
+      });
+      return;
+    }
+
+    montrer('resultat', 'resultat-titre');
   });
 
   // Vidéos YouTube : sur le site en ligne, elles se chargent seulement au clic (mode confidentialité renforcée).
