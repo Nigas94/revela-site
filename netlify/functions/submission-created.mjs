@@ -37,13 +37,16 @@ export const handler = async (event) => {
     host: SMTP_HOST || "smtp.mail.ovh.net", port: 465, secure: true, auth: { user: SMTP_USER, pass: SMTP_PASS },
   });
   try {
-    await transport.sendMail({
+    const info = await transport.sendMail({
       from: `"Site Révéla" <${SMTP_USER}>`,
       to: MAIL_TO || SMTP_USER,
       ...(valide ? { replyTo: email } : {}),
       subject: `Demande de devis · ${propre(d.entreprise) || propre(d.nom) || "nouveau prospect"}`,
       text: texte, html,
     });
+    // ce que le serveur OVH a répondu : adresses acceptées ou refusées (jamais le mot de passe)
+    console.log(`E-mail remis à ${SMTP_HOST || "smtp.mail.ovh.net"} pour ${info.accepted.join(", ") || "personne"}`
+      + (info.rejected.length ? ` ; refusé pour ${info.rejected.join(", ")}` : "") + ` ; réponse : ${info.response}`);
   } catch (e) {
     console.error("Envoi de l'e-mail impossible :", e.message);   // la demande reste visible dans Netlify Forms
   }
