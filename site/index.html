@@ -1,20 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr" data-embed="youtube" data-form="netlify">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Révéla · Studio de motion design explicatif</title>
 <meta name="description" content="Révéla, studio de vidéos et de posts explicatifs en motion design. On explique, vous vendez.">
-<meta name="theme-color" content="#0B1D3A">
+<meta name="theme-color" content="#F5F4F0">
 <link rel="canonical" href="https://www.revela-motion.fr/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preload" href="assets/fonts/montserrat-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/archivo-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css">
+<script src="assets/pret.js"></script>
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:site_name" content="Révéla">
 <meta property="og:title" content="Révéla · On explique, vous vendez.">
-<meta property="og:description" content="Révéla, studio de vidéos et de posts explicatifs en motion design. On explique, vous vendez.">
+<meta property="og:description" content="Vidéos et posts explicatifs en motion design, au format vertical pour TikTok, Reels et Shorts.">
 <meta property="og:url" content="https://www.revela-motion.fr/">
 <meta property="og:image" content="https://www.revela-motion.fr/partage.jpg">
 <meta property="og:image:width" content="1200">
@@ -22,258 +23,350 @@
 <meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
-<!-- Dégradé or partagé par les deux dessins du projecteur -->
-<svg class="defs-svg" width="0" height="0" aria-hidden="true" focusable="false">
-  <defs>
-    <linearGradient id="g-or" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#F1D78A"/>
-      <stop offset=".5" stop-color="#D4AF37"/>
-      <stop offset="1" stop-color="#A8822A"/>
-    </linearGradient>
-  </defs>
-</svg>
+<a class="evitement" href="#contenu">Aller au contenu</a>
+
+<p class="annonce"><a href="#offres"><b>Offre de lancement</b> <span>La vidéo explicative de 30&nbsp;secondes à 150&nbsp;€&nbsp;HT<span class="annonce-long"> au lieu de 400&nbsp;€&nbsp;HT, pour nos 3&nbsp;premiers clients</span>.</span></a></p>
 
 <header class="entete">
-  <div class="wrap entete-in">
+  <div class="entete-in">
     <a class="marque" href="#haut" aria-label="Révéla, retour en haut de la page">
-      <svg viewBox="0 0 110 120" aria-hidden="true">
-        <g fill="none" stroke="url(#g-or)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="marque-logo" viewBox="0 0 110 120" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M38 0 V16 M22 16 H54 M22 16 V50 M54 16 V50"/>
-          <g transform="rotate(30 38 52)">
+          <g class="lampe-tete" transform="rotate(30 38 52)">
             <path d="M12 39 Q4 52 12 65 H64 V39 Z"/>
             <rect x="64" y="35" width="8" height="34" rx="1.5"/>
             <path d="M72 35 L92 23 M72 69 L92 81"/>
-            <ellipse cx="75" cy="52" rx="3.6" ry="13" fill="url(#g-or)" stroke="none"/>
+            <ellipse class="lampe-lentille" cx="75" cy="52" rx="3.6" ry="13" stroke="none"/>
           </g>
         </g>
       </svg>
       <span class="marque-nom">Révéla</span>
     </a>
-    <nav class="menu" aria-label="Sections de la page">
+    <nav class="menu" id="menu" aria-label="Sections de la page">
       <a href="#methode">Méthode</a>
-      <a href="#offres">Offres</a>
       <a href="#realisations">Réalisations</a>
-      <a href="#projet">Déroulé</a>
-      <a href="#devis">Contact</a>
+      <a href="#offres">Offres</a>
+      <a href="#questions">Questions</a>
     </nav>
-    <a class="btn btn-or btn-petit" href="#devis">Devis gratuit</a>
+    <a class="btn btn-plein btn-petit entete-cta" href="#devis">Devis gratuit</a>
+    <button type="button" class="ctrl menu-bouton" aria-expanded="false" aria-controls="menu" aria-label="Ouvrir le menu"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.5 5.5h11M2.5 10.5h11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </div>
 </header>
 
-<main>
-  <section class="hero intro-scroll" id="haut" data-intro>
-  <div class="intro-scene">
-    <div class="scene" aria-hidden="true">
-      <div class="halo"></div>
-      <div class="faisceau"><div class="cone"></div></div>
-      <svg class="projo" viewBox="0 0 110 120" focusable="false">
-        <g fill="none" stroke="url(#g-or)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M38 0 V16"/>
-          <path d="M22 16 H54 M22 16 V50 M54 16 V50"/>
-          <g class="proj-corps">
+<main id="contenu">
+
+  <section class="accueil" id="haut">
+    <div class="projo" aria-hidden="true">
+      <span class="projo-faisceau"></span>
+      <svg class="projo-lampe" viewBox="0 0 110 120" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M38 0 V16 M22 16 H54 M22 16 V50 M54 16 V50"/>
+          <g class="lampe-tete" transform="rotate(30 38 52)">
             <path d="M12 39 Q4 52 12 65 H64 V39 Z"/>
-            <path d="M24 39 V65 M34 39 V65"/>
             <rect x="64" y="35" width="8" height="34" rx="1.5"/>
             <path d="M72 35 L92 23 M72 69 L92 81"/>
-            <ellipse class="lentille" cx="75" cy="52" rx="3.6" ry="13" fill="url(#g-or)" stroke="none"/>
+            <ellipse class="lampe-lentille" cx="75" cy="52" rx="3.6" ry="13" stroke="none"/>
           </g>
-          <circle cx="22" cy="52" r="2.6" fill="#0B1D3A"/>
-          <circle cx="54" cy="52" r="2.6" fill="#0B1D3A"/>
         </g>
       </svg>
     </div>
-
-    <div class="intro-accroche" aria-hidden="true">
-      <p class="intro-question">Vos clients comprennent vraiment <em class="accent">ce que vous vendez&nbsp;?</em></p>
-      <p class="intro-legende code">Un long texte, une photo figée… et vos prospects passent leur chemin.</p>
-    </div>
-
-    <div class="wrap hero-in">
-      <div class="hero-texte">
-        <p class="surtitre">Studio de motion design</p>
-        <h1>On explique,<br><em>vous vendez.</em></h1>
+    <div class="wrap accueil-in">
+      <div class="accueil-texte">
+        <p class="metier">Studio de motion design</p>
+        <h1 class="titre-geant"><span class="tg-1">On explique,</span> <span class="tg-2">vous vendez.<svg class="trait" viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M4 12 C 38 3, 72 18, 112 10 S 186 3, 228 11 S 276 15, 296 6" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" pathLength="1"/></svg></span></h1>
         <p class="chapo">Révéla crée des vidéos et des posts explicatifs en motion design. En quelques secondes, vos prospects comprennent à quoi sert votre produit ou votre service, comment vous travaillez et pourquoi vous choisir.</p>
         <div class="actions">
-          <a class="btn btn-or" href="#devis">Demander un devis gratuit</a>
-          <a class="btn btn-ligne" href="#methode">Découvrir la méthode</a>
+          <a class="btn btn-plein btn-grand" href="#devis" data-aimant>Demander un devis gratuit</a>
+          <a class="lien" href="#realisations">Voir nos réalisations</a>
         </div>
-        <p class="code formats">Format 9:16 · TikTok · Reels · Shorts</p>
+        <p class="preuve">Devis gratuit, sans engagement. Déjà en ligne pour <b>MR&nbsp;BONPLAN Pare-Brise</b> et <b>AMK&nbsp;Dépannage</b>.</p>
       </div>
+      <div class="accueil-scene">
+        <div class="scene-tels" role="img" aria-label="Trois extraits de vidéos verticales créées par Révéla, pour MR BONPLAN Pare-Brise, pour Révéla et pour AMK Dépannage.">
+          <div class="tel tel-g"><video class="auto" muted loop playsinline preload="none" poster="realisations/apercus/mrbonplan-etapes.jpg" width="540" height="960" tabindex="-1"><source src="realisations/apercus/mrbonplan-etapes.mp4" type="video/mp4"></video></div>
+          <div class="tel tel-d"><video class="auto" muted loop playsinline preload="none" poster="realisations/apercus/amk-pov-ecran.jpg" width="540" height="960" tabindex="-1"><source src="realisations/apercus/amk-pov-ecran.mp4" type="video/mp4"></video></div>
+          <div class="tel tel-c"><video class="auto" muted loop playsinline preload="none" poster="realisations/apercus/revela-formats.jpg" width="540" height="960" tabindex="-1"><source src="realisations/apercus/revela-formats.mp4" type="video/mp4"></video></div>
+          <span class="pastille p-1">MR&nbsp;BONPLAN</span>
+          <span class="pastille p-2">AMK Dépannage</span>
+          <span class="pastille p-3">TikTok, Reels, Shorts</span>
+        </div>
+        <button type="button" class="ctrl scene-pause" data-pause-accueil aria-pressed="false" aria-label="Mettre en pause les animations de l'accueil"><svg class="i-pause" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 3v10M10.5 3v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="i-lecture" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></button>
+      </div>
+    </div>
+  </section>
 
-      <figure class="telephone intro-tel">
-        <div class="ecran ecran-hero">
-          <div class="post-fige" aria-hidden="true">
-            <div class="post-fil">
-              <div class="post-tete"><span class="post-avatar"></span><span class="post-nom">votre_entreprise</span><span class="post-points">•••</span></div>
-              <div class="post-photo">
-                <img src="realisations/intro/avant.jpg" alt="" width="540" height="540" loading="lazy" decoding="async">
+  <div class="defile" aria-hidden="true"><div class="defile-piste"><span>Vidéos explicatives</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>Posts animés</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>Mise en avant produit</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>TikTok</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>Instagram Reels</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>YouTube Shorts</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>Format 9:16</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>Vidéos explicatives</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>Posts animés</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>Mise en avant produit</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>TikTok</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>Instagram Reels</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>YouTube Shorts</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg><span>Format 9:16</span><svg class="etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12z" fill="currentColor"/></svg></div></div>
+
+  <section class="constat" id="constat" data-scene>
+    <div class="constat-colle">
+      <div class="wrap constat-in">
+        <div class="constat-texte">
+          <h2>Un bon produit mal expliqué <span class="surligne">ne se vend pas.</span></h2>
+          <div class="temps">
+            <p class="t1">Sur les réseaux, un long texte ou une photo figée ne retient personne. Le pouce continue de défiler, et votre prospect passe à côté de ce que vous faites de mieux.</p>
+            <p class="t2">Révéla transforme votre offre en une vidéo animée que l'on comprend du premier coup, faite pour arrêter le scroll et donner envie de vous contacter.</p>
+          </div>
+        </div>
+        <div class="constat-scene">
+          <figure class="avant">
+            <div class="tel post-fige">
+              <div class="post-in">
+                <p class="post-compte"><span class="post-avatar"></span>votre_entreprise</p>
+                <img src="realisations/intro/avant.jpg" alt="Photo figée d'une gourde en acier, sans explication." width="540" height="540" loading="lazy" decoding="async">
+                <p class="post-stats">0 j'aime, 0 commentaire</p>
+                <p class="post-legende">Découvrez notre nouveau produit, pensé avec soin pour répondre à tous vos besoins du quotidien. Grâce à ses nombreuses caractéristiques, à ses matériaux de qualité et à son design étudié, il vous accompagnera partout, au travail comme à la maison, été comme hiver, et bien plus encore… <span>plus</span></p>
               </div>
-              <p class="post-reactions">0 j'aime · 0 commentaire</p>
-              <p class="post-texte"><b>votre_entreprise</b> Découvrez notre nouveau produit, pensé avec soin pour répondre à tous vos besoins du quotidien. Grâce à ses nombreuses caractéristiques, à ses matériaux de qualité et à son design étudié, il vous accompagnera partout, au travail comme à la maison, été comme hiver, et bien plus encore… <span>plus</span></p>
-              <div class="post-tete post-suivant"><span class="post-avatar"></span><span class="post-ligne"></span></div>
-              <div class="post-photo post-vide"></div>
             </div>
-          </div>
-          <video class="intro-video" muted loop playsinline preload="none" poster="realisations/intro/revela-hero.jpg" aria-hidden="true" tabindex="-1"><source src="realisations/intro/revela-hero.mp4" type="video/mp4"></video>
+            <figcaption>Avant&nbsp;: un long texte, une photo figée</figcaption>
+          </figure>
+          <figure class="apres">
+            <div class="tel"><video class="auto-scene" muted loop playsinline preload="none" poster="realisations/apercus/revela-comprendre.jpg" width="540" height="960" tabindex="-1" aria-label="Extrait animé : la même gourde, expliquée en quelques secondes."><source src="realisations/apercus/revela-comprendre.mp4" type="video/mp4"></video></div>
+            <figcaption>Après&nbsp;: votre produit, expliqué</figcaption>
+          </figure>
+          <span class="volet" aria-hidden="true"></span>
         </div>
-        <figcaption><span>Votre produit, expliqué</span><span class="code">9:16</span></figcaption>
-      </figure>
-    </div>
-
-    <p class="intro-defiler code" aria-hidden="true"><span></span>Faites défiler</p>
-  </div>
-  </section>
-
-  <section class="bande bande-ombre" id="constat">
-    <div class="wrap constat">
-      <h2>Un bon produit mal expliqué <em>ne se vend pas.</em></h2>
-      <div class="constat-texte">
-        <p>Sur les réseaux, un long texte ou une photo figée ne retient personne. Le pouce continue de défiler, et votre prospect passe à côté de ce que vous faites de mieux.</p>
-        <p>Révéla transforme votre offre en une <strong>vidéo animée que l'on comprend du premier coup</strong>, faite pour arrêter le scroll et donner envie de vous contacter.</p>
       </div>
     </div>
   </section>
 
-  <section class="bande" id="methode">
+  <section class="methode" id="methode">
     <div class="wrap">
-      <div class="tete">
-        <p class="surtitre">La méthode Révéla</p>
-        <h2>Trois questions, <em>une vidéo claire.</em></h2>
-        <p class="intro">Chaque vidéo répond, dans l'ordre, aux trois questions que votre client se pose avant de vous contacter.</p>
-      </div>
+      <header class="tete">
+        <h2>Trois questions, une vidéo claire.</h2>
+        <p>Chaque vidéo répond, dans l'ordre, aux trois questions que votre client se pose avant de vous contacter.</p>
+      </header>
 
-      <ol class="trois">
-        <li>
-          <span class="chiffre" aria-hidden="true">1</span>
-          <h3>À quoi sert votre produit ou votre service</h3>
-          <p>Il est montré en situation, avec ses usages, pour que l'on comprenne en une image ce qu'il apporte.</p>
-        </li>
-        <li>
-          <span class="chiffre" aria-hidden="true">2</span>
-          <h3>Comment vous opérez</h3>
-          <p>Vos étapes deviennent une frise animée. Votre client voit comment ça se passe, du premier contact au résultat.</p>
-        </li>
-        <li>
-          <span class="chiffre" aria-hidden="true">3</span>
-          <h3>Pourquoi vous choisir</h3>
-          <p>Vos atouts passent en lumière, un par un, pour qu'on vous contacte vous plutôt qu'un autre.</p>
-        </li>
-      </ol>
-
-      <figure class="anatomie">
-        <figcaption><span class="surtitre">Exemple</span><span>La structure de notre vidéo de présentation, en 35 secondes</span><button type="button" class="btn btn-ligne btn-petit frise-bouton" data-frise hidden>Rejouer la frise</button></figcaption>
-        <div class="piste-zone">
-          <div class="piste" data-durees="3,4,3,5,5,4,4,7" role="img" aria-label="Frise de 35 secondes : accroche de 0 à 3 secondes, problème de 3 à 7, révélation de 7 à 10, point 1 de 10 à 15, point 2 de 15 à 20, point 3 de 20 à 24, résultat de 24 à 28, signature et contact de 28 à 35.">
-            <span class="seg seg-a d3"></span>
-            <span class="seg seg-b d4"></span>
-            <span class="seg seg-a d3"></span>
-            <span class="seg seg-cle d5">1</span>
-            <span class="seg seg-cle d5">2</span>
-            <span class="seg seg-cle d4">3</span>
-            <span class="seg seg-b d4"></span>
-            <span class="seg seg-a d7"></span>
+      <div class="stories" data-stories>
+        <div class="stories-ecran">
+          <div class="tel">
+            <div class="stories-barres" aria-hidden="true"><span><i></i></span><span><i></i></span><span><i></i></span></div>
+            <video class="story actif" muted loop playsinline preload="none" poster="realisations/apercus/amk-presentation.jpg" width="540" height="960" tabindex="-1" data-nom="AMK Dépannage" aria-hidden="true"><source src="realisations/apercus/amk-presentation.mp4" type="video/mp4"></video>
+            <video class="story" muted loop playsinline preload="none" poster="realisations/apercus/mrbonplan-etapes.jpg" width="540" height="960" tabindex="-1" data-nom="MR BONPLAN Pare-Brise" aria-hidden="true"><source src="realisations/apercus/mrbonplan-etapes.mp4" type="video/mp4"></video>
+            <video class="story" muted loop playsinline preload="none" poster="realisations/apercus/amk-bento.jpg" width="540" height="960" tabindex="-1" data-nom="AMK Dépannage" aria-hidden="true"><source src="realisations/apercus/amk-bento.mp4" type="video/mp4"></video>
           </div>
-          <span class="tete-lecture" aria-hidden="true"><span class="bulle-lecture code">0 s</span></span>
+          <p class="stories-legende"><span>Extrait&nbsp;: <b data-story-nom>AMK Dépannage</b></span>
+            <button type="button" class="ctrl" data-stories-pause aria-pressed="false" aria-label="Mettre en pause les extraits"><svg class="i-pause" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 3v10M10.5 3v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="i-lecture" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></button></p>
         </div>
-        <div class="graduation" aria-hidden="true">
-          <span class="tick p0"></span>
-          <span class="tick p5"></span>
-          <span class="tick p10"></span>
-          <span class="tick p15"></span>
-          <span class="tick p20"></span>
-          <span class="tick p25"></span>
-          <span class="tick p30"></span>
-          <span class="tick p35"></span>
-          <span class="grad grad-debut p0">0 s</span>
-          <span class="grad p10">10 s</span>
-          <span class="grad p20">20 s</span>
-          <span class="grad p30">30 s</span>
-          <span class="grad grad-fin p35">35 s</span>
-        </div>
-        <ol class="legende">
-          <li><span class="code">00 – 03 s</span><span>L'accroche</span></li>
-          <li><span class="code">03 – 07 s</span><span>Le problème</span></li>
-          <li><span class="code">07 – 10 s</span><span>La révélation</span></li>
-          <li class="cle"><span class="code">10 – 15 s</span><span><b>1</b>À quoi ça sert</span></li>
-          <li class="cle"><span class="code">15 – 20 s</span><span><b>2</b>Comment vous opérez</span></li>
-          <li class="cle"><span class="code">20 – 24 s</span><span><b>3</b>Pourquoi vous</span></li>
-          <li><span class="code">24 – 28 s</span><span>Le résultat</span></li>
-          <li><span class="code">28 – 35 s</span><span>Signature et contact</span></li>
+        <ol class="questions">
+          <li class="actif">
+            <h3><button type="button" data-story="0" aria-current="true">
+              <svg class="picto" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="21" cy="27" r="17"/><circle cx="21" cy="27" r="9"/><path d="M21 27 41 7M33.5 7H41v7.5"/></g><circle cx="21" cy="27" r="3" fill="currentColor"/></svg>
+              <span class="mot">À quoi</span> <span class="suite">sert votre produit ou votre service</span></button></h3>
+            <p>Il est montré en situation, avec ses usages, pour que l'on comprenne en une image ce qu'il apporte.</p>
+          </li>
+          <li>
+            <h3><button type="button" data-story="1">
+              <svg class="picto" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M7 9l15 15L7 39M26 9l15 15-15 15" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="mot">Comment</span> <span class="suite">vous opérez</span></button></h3>
+            <p>Vos étapes deviennent une frise animée. Votre client voit comment ça se passe, du premier contact au résultat.</p>
+          </li>
+          <li>
+            <h3><button type="button" data-story="2">
+              <svg class="picto" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M24 5l5.6 11.6 12.6 1.7-9.2 8.8 2.3 12.6L24 33.6l-11.3 6.1L15 27.1l-9.2-8.8 12.6-1.7z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/></svg>
+              <span class="mot">Pourquoi</span> <span class="suite">vous choisir</span></button></h3>
+            <p>Vos atouts passent en lumière, un par un, pour qu'on vous contacte vous plutôt qu'un autre.</p>
+          </li>
         </ol>
-      </figure>
+      </div>
+
+      <div class="frise" data-frise>
+        <div class="frise-tete">
+          <p class="frise-titre">Exemple&nbsp;: la structure de notre vidéo de présentation, en 35&nbsp;secondes</p>
+          <button type="button" class="btn btn-ligne btn-petit" data-frise-bouton>Rejouer la frise</button>
+        </div>
+        <div class="frise-piste" aria-hidden="true"><span class="seg d3"><i></i></span><span class="seg d4"><i></i></span><span class="seg d3"><i></i></span><span class="seg d5"><i></i></span><span class="seg d5"><i></i></span><span class="seg d4"><i></i></span><span class="seg d4"><i></i></span><span class="seg d7"><i></i></span><span class="frise-tete-lecture"><b data-frise-temps>00&nbsp;s</b></span></div>
+        <ol class="frise-legende">
+          <li><button type="button" data-seg="0"><span class="tc">00–03&nbsp;s</span><span class="nom">L'accroche</span></button></li>
+          <li><button type="button" data-seg="1"><span class="tc">03–07&nbsp;s</span><span class="nom">Le problème</span></button></li>
+          <li><button type="button" data-seg="2"><span class="tc">07–10&nbsp;s</span><span class="nom">La révélation</span></button></li>
+          <li><button type="button" data-seg="3"><span class="tc">10–15&nbsp;s</span><span class="nom">1 · À quoi ça sert</span></button></li>
+          <li><button type="button" data-seg="4"><span class="tc">15–20&nbsp;s</span><span class="nom">2 · Comment vous opérez</span></button></li>
+          <li><button type="button" data-seg="5"><span class="tc">20–24&nbsp;s</span><span class="nom">3 · Pourquoi vous</span></button></li>
+          <li><button type="button" data-seg="6"><span class="tc">24–28&nbsp;s</span><span class="nom">Le résultat</span></button></li>
+          <li><button type="button" data-seg="7"><span class="tc">28–35&nbsp;s</span><span class="nom">Signature et contact</span></button></li>
+        </ol>
+      </div>
     </div>
   </section>
 
-  <section class="bande bande-ombre" id="formats">
+  <section class="realisations" id="realisations" data-salle>
     <div class="wrap">
-      <div class="tete">
-        <p class="surtitre">Ce que nous créons</p>
-        <h2>Des formats faits <em>pour les réseaux.</em></h2>
+      <header class="tete">
+        <h2>Nos dernières réalisations.</h2>
+        <p>Des vidéos en motion design pour deux entreprises d'Île-de-France&nbsp;: MR&nbsp;BONPLAN Pare-Brise, qui remplace les pare-brise à domicile, et AMK&nbsp;Dépannage, qui dépanne et remorque jour et nuit. Et les nôtres, pour vous montrer d'autres styles. Les carrousels tournent tout seuls&nbsp;; touchez la vidéo du centre pour la voir en entier.</p>
+      </header>
+      <div class="clients">
+      <section class="carrousel" aria-roledescription="carrousel" aria-labelledby="c-mrbonplan" data-carrousel>
+        <div class="carrousel-tete">
+          <h3 id="c-mrbonplan">MR BONPLAN Pare-Brise</h3>
+          <p class="carrousel-sous">Remplacement de pare-brise, en Île-de-France</p>
+          <div class="carrousel-pied">
+            <span class="compteur" aria-hidden="true"><span data-num>01</span> / 04</span>
+            <span class="progression" aria-hidden="true"><span></span></span>
+            <span class="carrousel-ctrl">
+              <button type="button" class="ctrl" data-prec aria-label="Vidéo précédente"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.5 2.5 5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button type="button" class="ctrl" data-pause aria-pressed="false" aria-label="Mettre en pause le défilement"><svg class="i-pause" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 3v10M10.5 3v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="i-lecture" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></button>
+              <button type="button" class="ctrl" data-suiv aria-label="Vidéo suivante"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 2.5 11 8l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </span>
+          </div>
+        </div>
+        <div class="anneau">
+            <div class="diapo d-centre" role="group" aria-roledescription="diapositive" aria-label="1 sur 4"><a class="ecran" href="https://www.youtube.com/shorts/jAJtCBDxtA0" target="_blank" rel="noopener" data-youtube="jAJtCBDxtA0" data-titre="Les 6 étapes d&#x27;un changement de pare-brise" data-duree="0:39" aria-label="Voir la vidéo «&nbsp;Les 6 étapes d&#x27;un changement de pare-brise&nbsp;», 0:39, sur YouTube"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/mrbonplan-etapes.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/mrbonplan-etapes.mp4" type="video/mp4"></video><span class="lecture" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></span><span class="duree" aria-hidden="true">0:39</span></a><p class="legende-video"><span class="projet-titre">Les 6 étapes d&#x27;un changement de pare-brise</span><span class="projet-genre">Vidéo explicative</span></p></div>
+            <div class="diapo d-droite" role="group" aria-roledescription="diapositive" aria-label="2 sur 4" aria-hidden="true"><a class="ecran" href="https://www.youtube.com/shorts/xq9oYFA4-fk" target="_blank" rel="noopener" data-youtube="xq9oYFA4-fk" data-titre="Partout en Île-de-France" data-duree="0:32" aria-label="Voir la vidéo «&nbsp;Partout en Île-de-France&nbsp;», 0:32, sur YouTube" tabindex="-1"><img src="realisations/xq9oYFA4-fk.jpg" alt="" width="450" height="800" loading="lazy" decoding="async"><span class="lecture" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></span><span class="duree" aria-hidden="true">0:32</span></a><p class="legende-video"><span class="projet-titre">Partout en Île-de-France</span><span class="projet-genre">Pub zone d&#x27;intervention</span></p></div>
+            <div class="diapo d-fond" role="group" aria-roledescription="diapositive" aria-label="3 sur 4" aria-hidden="true"><a class="ecran" href="https://www.youtube.com/shorts/F-TTL6jYolU" target="_blank" rel="noopener" data-youtube="F-TTL6jYolU" data-titre="Client satisfait" data-duree="0:21" aria-label="Voir la vidéo «&nbsp;Client satisfait&nbsp;», 0:21, sur YouTube" tabindex="-1"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/mrbonplan-client-satisfait.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/mrbonplan-client-satisfait.mp4" type="video/mp4"></video><span class="lecture" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></span><span class="duree" aria-hidden="true">0:21</span></a><p class="legende-video"><span class="projet-titre">Client satisfait</span><span class="projet-genre">Pub avis client</span></p></div>
+            <div class="diapo d-gauche" role="group" aria-roledescription="diapositive" aria-label="4 sur 4" aria-hidden="true"><div class="ecran sans-lien"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/mrbonplan-typo-3d.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/mrbonplan-typo-3d.mp4" type="video/mp4"></video><span class="bientot">Bientôt en entier</span><span class="duree" aria-hidden="true">0:14</span></div><p class="legende-video"><span class="projet-titre">Une fissure sur le pare-brise&nbsp;?</span><span class="projet-genre">Pub typo animée</span></p></div>
+        </div>
+        <p class="sr-only" aria-live="polite" data-annonce></p>
+      </section>
+      <section class="carrousel carrousel-inverse" aria-roledescription="carrousel" aria-labelledby="c-amk" data-carrousel>
+        <div class="carrousel-tete">
+          <h3 id="c-amk">AMK Dépannage</h3>
+          <p class="carrousel-sous">Dépannage et remorquage 24h/24, à Paris et en Île-de-France</p>
+          <div class="carrousel-pied">
+            <span class="compteur" aria-hidden="true"><span data-num>01</span> / 04</span>
+            <span class="progression" aria-hidden="true"><span></span></span>
+            <span class="carrousel-ctrl">
+              <button type="button" class="ctrl" data-prec aria-label="Vidéo précédente"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.5 2.5 5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button type="button" class="ctrl" data-pause aria-pressed="false" aria-label="Mettre en pause le défilement"><svg class="i-pause" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 3v10M10.5 3v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="i-lecture" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></button>
+              <button type="button" class="ctrl" data-suiv aria-label="Vidéo suivante"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 2.5 11 8l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </span>
+          </div>
+        </div>
+        <div class="anneau">
+            <div class="diapo d-centre" role="group" aria-roledescription="diapositive" aria-label="1 sur 4"><div class="ecran sans-lien"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/amk-presentation.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/amk-presentation.mp4" type="video/mp4"></video><span class="bientot">Bientôt en entier</span><span class="duree" aria-hidden="true">0:39</span></div><p class="legende-video"><span class="projet-titre">Une panne n&#x27;a pas d&#x27;horaire</span><span class="projet-genre">Vidéo de présentation</span></p></div>
+            <div class="diapo d-droite" role="group" aria-roledescription="diapositive" aria-label="2 sur 4" aria-hidden="true"><div class="ecran sans-lien"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/amk-bento.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/amk-bento.mp4" type="video/mp4"></video><span class="bientot">Bientôt en entier</span><span class="duree" aria-hidden="true">0:18</span></div><p class="legende-video"><span class="projet-titre">Tous les services en un coup d&#x27;œil</span><span class="projet-genre">Pub widgets</span></p></div>
+            <div class="diapo d-fond" role="group" aria-roledescription="diapositive" aria-label="3 sur 4" aria-hidden="true"><div class="ecran sans-lien"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/amk-pov-ecran.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/amk-pov-ecran.mp4" type="video/mp4"></video><span class="bientot">Bientôt en entier</span><span class="duree" aria-hidden="true">0:24</span></div><p class="legende-video"><span class="projet-titre">POV&nbsp;: votre voiture vous lâche en pleine nuit</span><span class="projet-genre">Pub écran</span></p></div>
+            <div class="diapo d-gauche" role="group" aria-roledescription="diapositive" aria-label="4 sur 4" aria-hidden="true"><a class="ecran" href="https://www.youtube.com/shorts/PMuMlqp9RyQ" target="_blank" rel="noopener" data-youtube="PMuMlqp9RyQ" data-titre="En panne, en pleine nuit ?" data-duree="0:20" aria-label="Voir la vidéo «&nbsp;En panne, en pleine nuit&nbsp;?&nbsp;», 0:20, sur YouTube" tabindex="-1"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/amk-notifications.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/amk-notifications.mp4" type="video/mp4"></video><span class="lecture" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></span><span class="duree" aria-hidden="true">0:20</span></a><p class="legende-video"><span class="projet-titre">En panne, en pleine nuit&nbsp;?</span><span class="projet-genre">Pub notifications</span></p></div>
+        </div>
+        <p class="sr-only" aria-live="polite" data-annonce></p>
+      </section>
+      <section class="carrousel" aria-roledescription="carrousel" aria-labelledby="c-revela" data-carrousel>
+        <div class="carrousel-tete">
+          <h3 id="c-revela">Révéla</h3>
+          <p class="carrousel-sous">Nos propres vidéos, dans plusieurs styles</p>
+          <div class="carrousel-pied">
+            <span class="compteur" aria-hidden="true"><span data-num>01</span> / 06</span>
+            <span class="progression" aria-hidden="true"><span></span></span>
+            <span class="carrousel-ctrl">
+              <button type="button" class="ctrl" data-prec aria-label="Vidéo précédente"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.5 2.5 5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button type="button" class="ctrl" data-pause aria-pressed="false" aria-label="Mettre en pause le défilement"><svg class="i-pause" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 3v10M10.5 3v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="i-lecture" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></button>
+              <button type="button" class="ctrl" data-suiv aria-label="Vidéo suivante"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 2.5 11 8l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </span>
+          </div>
+        </div>
+        <div class="anneau">
+            <div class="diapo d-centre" role="group" aria-roledescription="diapositive" aria-label="1 sur 6"><a class="ecran" href="https://www.youtube.com/shorts/iKM8A0U2rj0" target="_blank" rel="noopener" data-youtube="iKM8A0U2rj0" data-titre="Personne ne lit votre post." data-duree="0:28" aria-label="Voir la vidéo «&nbsp;Personne ne lit votre post.&nbsp;», 0:28, sur YouTube"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/revela-personne-ne-lit.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/revela-personne-ne-lit.mp4" type="video/mp4"></video><span class="lecture" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></span><span class="duree" aria-hidden="true">0:28</span></a><p class="legende-video"><span class="projet-titre">Personne ne lit votre post.</span><span class="projet-genre">Vidéo explicative</span></p></div>
+            <div class="diapo d-droite" role="group" aria-roledescription="diapositive" aria-label="2 sur 6" aria-hidden="true"><a class="ecran" href="https://www.youtube.com/shorts/6GJqgZe3940" target="_blank" rel="noopener" data-youtube="6GJqgZe3940" data-titre="De la recherche Google à la vente" data-duree="0:33" aria-label="Voir la vidéo «&nbsp;De la recherche Google à la vente&nbsp;», 0:33, sur YouTube" tabindex="-1"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/revela-recherche-vente.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/revela-recherche-vente.mp4" type="video/mp4"></video><span class="lecture" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></span><span class="duree" aria-hidden="true">0:33</span></a><p class="legende-video"><span class="projet-titre">De la recherche Google à la vente</span><span class="projet-genre">Vidéo de présentation</span></p></div>
+            <div class="diapo d-fond" role="group" aria-roledescription="diapositive" aria-label="3 sur 6" aria-hidden="true"><a class="ecran" href="https://www.youtube.com/shorts/WsFPh9h3QIU" target="_blank" rel="noopener" data-youtube="WsFPh9h3QIU" data-titre="POV : votre appli mérite une vidéo explicative" data-duree="0:23" aria-label="Voir la vidéo «&nbsp;POV&nbsp;: votre appli mérite une vidéo explicative&nbsp;», 0:23, sur YouTube" tabindex="-1"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/revela-pov-ecran.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/revela-pov-ecran.mp4" type="video/mp4"></video><span class="lecture" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></span><span class="duree" aria-hidden="true">0:23</span></a><p class="legende-video"><span class="projet-titre">POV&nbsp;: votre appli mérite une vidéo explicative</span><span class="projet-genre">Pub écran</span></p></div>
+            <div class="diapo d-fond" role="group" aria-roledescription="diapositive" aria-label="4 sur 6" aria-hidden="true"><a class="ecran" href="https://www.youtube.com/shorts/KTVYsfptouI" target="_blank" rel="noopener" data-youtube="KTVYsfptouI" data-titre="Votre métier en vidéo explicative animée" data-duree="0:17" aria-label="Voir la vidéo «&nbsp;Votre métier en vidéo explicative animée&nbsp;», 0:17, sur YouTube" tabindex="-1"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/revela-typo-3d.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/revela-typo-3d.mp4" type="video/mp4"></video><span class="lecture" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></span><span class="duree" aria-hidden="true">0:17</span></a><p class="legende-video"><span class="projet-titre">Votre métier en vidéo explicative animée</span><span class="projet-genre">Pub typo animée</span></p></div>
+            <div class="diapo d-fond" role="group" aria-roledescription="diapositive" aria-label="5 sur 6" aria-hidden="true"><a class="ecran" href="https://www.youtube.com/shorts/DwxMxURHQXA" target="_blank" rel="noopener" data-youtube="DwxMxURHQXA" data-titre="Votre vidéo explicative de A à Z" data-duree="0:15" aria-label="Voir la vidéo «&nbsp;Votre vidéo explicative de A à Z&nbsp;», 0:15, sur YouTube" tabindex="-1"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/revela-bento.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/revela-bento.mp4" type="video/mp4"></video><span class="lecture" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></span><span class="duree" aria-hidden="true">0:15</span></a><p class="legende-video"><span class="projet-titre">Votre vidéo explicative de A à Z</span><span class="projet-genre">Pub widgets</span></p></div>
+            <div class="diapo d-gauche" role="group" aria-roledescription="diapositive" aria-label="6 sur 6" aria-hidden="true"><a class="ecran" href="https://www.youtube.com/shorts/75U0mHlDxFw" target="_blank" rel="noopener" data-youtube="75U0mHlDxFw" data-titre="Et si vos clients vous écrivaient d&#x27;eux-mêmes ?" data-duree="0:15" aria-label="Voir la vidéo «&nbsp;Et si vos clients vous écrivaient d&#x27;eux-mêmes&nbsp;?&nbsp;», 0:15, sur YouTube" tabindex="-1"><video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/revela-notifications.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/revela-notifications.mp4" type="video/mp4"></video><span class="lecture" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></span><span class="duree" aria-hidden="true">0:15</span></a><p class="legende-video"><span class="projet-titre">Et si vos clients vous écrivaient d&#x27;eux-mêmes&nbsp;?</span><span class="projet-genre">Pub notifications</span></p></div>
+        </div>
+        <p class="sr-only" aria-live="polite" data-annonce></p>
+      </section>
       </div>
-      <div class="services">
-        <article>
-          <p class="code">Vidéo verticale</p>
+      <div class="appel">
+        <p>Prochaine réalisation&nbsp;: <span class="surligne">la vôtre&nbsp;?</span></p>
+        <a class="btn btn-jaune btn-grand" href="#devis" data-aimant>Demander un devis</a>
+      </div>
+      <p class="note-video">Les extraits qui tournent sont muets et hébergés sur ce site. La vidéo complète se charge depuis YouTube (Google) seulement quand vous la lancez&nbsp;; YouTube peut alors déposer des cookies. <a href="confidentialite.html#videos">En savoir plus</a>. *Offre de MR&nbsp;BONPLAN Pare-Brise&nbsp;: voir conditions sur mrbonplan.com.</p>
+    </div>
+    <dialog class="lecteur-video" id="lecteur-video" aria-labelledby="lecteur-titre">
+      <h2 class="sr-only" id="lecteur-titre">Lecture de la vidéo</h2>
+      <button type="button" class="ctrl lecteur-fermer" aria-label="Fermer la vidéo"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m3.5 3.5 9 9m0-9-9 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+      <div class="lecteur-cadre"></div>
+    </dialog>
+  </section>
+
+  <section class="formats" id="formats">
+    <div class="wrap">
+      <header class="tete">
+        <h2>Des formats faits pour les réseaux.</h2>
+      </header>
+      <ul class="formats-liste">
+        <li class="format">
+          <div class="format-visuel fv-video"><div class="tel"><video class="auto" muted loop playsinline preload="none" poster="realisations/apercus/revela-bento.jpg" width="540" height="960" tabindex="-1" aria-hidden="true"><source src="realisations/apercus/revela-bento.mp4" type="video/mp4"></video></div></div>
+          <p class="format-type">Vidéo verticale</p>
           <h3>Vidéos explicatives</h3>
           <p>Votre produit ou votre service expliqué en une vidéo courte, prête pour TikTok, Instagram Reels et YouTube Shorts.</p>
-        </article>
-        <article>
-          <p class="code">Post animé</p>
+        </li>
+        <li class="format">
+          <div class="format-visuel fv-post" aria-hidden="true">
+            <div class="mini-post">
+              <p class="mini-q">Ça sert à quoi&nbsp;?</p>
+              <p class="mini-r"><span>À garder</span><span>votre eau</span><span>fraîche 12&nbsp;h.</span></p>
+              <span class="mini-points"><i></i><i></i><i></i></span>
+            </div>
+          </div>
+          <p class="format-type">Post animé</p>
           <h3>Posts explicatifs</h3>
-          <p>Des posts animés qui répondent à une seule question : un usage, une étape, ou ce que vos clients vous demandent souvent.</p>
-        </article>
-        <article>
-          <p class="code">Produit en relief</p>
+          <p>Des posts animés qui répondent à une seule question&nbsp;: un usage, une étape, ou ce que vos clients vous demandent souvent.</p>
+        </li>
+        <li class="format">
+          <div class="format-visuel fv-produit" aria-hidden="true">
+            <svg class="gourde" viewBox="0 0 120 240" focusable="false"><rect x="46" y="6" width="28" height="26" rx="6" fill="#FFD21F" stroke="#0C0C0D" stroke-width="5"/><rect x="50" y="32" width="20" height="18" fill="#0C0C0D"/><path d="M36 76 Q36 50 60 50 Q84 50 84 76 V214 Q84 232 66 232 H54 Q36 232 36 214 Z" fill="#0C0C0D"/><rect x="45" y="112" width="30" height="46" rx="4" fill="#F5F4F0"/><path d="M50 122h20" stroke="#FFD21F" stroke-width="5" stroke-linecap="round"/><path d="M50 132h14M50 140h18M50 150h9" stroke="#9A9A94" stroke-width="3" stroke-linecap="round"/></svg>
+            <span class="etiq e-1">Naturel</span><span class="etiq e-2">Recharge</span><span class="etiq e-3">Nomade</span>
+          </div>
+          <p class="format-type">Produit en relief</p>
           <h3>Mise en avant produit</h3>
           <p>Votre produit révélé dans la lumière, en rotation et en relief, pour vos publicités et vos pages de vente.</p>
-        </article>
-      </div>
+        </li>
+      </ul>
     </div>
   </section>
 
-  <section class="bande" id="offres">
+  <section class="offres" id="offres">
     <div class="wrap">
-      <div class="tete">
-        <p class="surtitre">Nos formules</p>
-        <h2>Des contenus chaque semaine, <em>sans y penser.</em></h2>
-        <p class="intro">Chaque mois, nous créons vos vidéos en motion design et vos posts image, prêts à publier. Choisissez le rythme qui vous convient : vous pourrez passer à la formule supérieure à tout moment.</p>
-      </div>
+      <header class="tete">
+        <h2>Des contenus chaque semaine, <span class="surligne">sans y penser.</span></h2>
+        <p>Chaque mois, nous créons vos vidéos en motion design et vos posts image, prêts à publier. Choisissez le rythme qui vous convient&nbsp;: vous pourrez passer à la formule supérieure à tout moment.</p>
+      </header>
+
+      <fieldset class="rythme">
+        <legend>Combien de posts par semaine&nbsp;?</legend>
+        <label><input type="radio" name="rythme" value="essentiel"><span><b>2</b></span></label>
+        <label><input type="radio" name="rythme" value="croissance" checked><span><b>3</b></span></label>
+        <label><input type="radio" name="rythme" value="premium"><span><b>4</b></span></label>
+      </fieldset>
+
       <div class="formules">
-        <article class="formule">
+        <article class="formule f-essentiel">
           <h3>Essentiel</h3>
-          <p class="prix"><span class="montant">500 €</span><span class="code">HT par mois</span></p>
-          <p class="rythme">8 posts par mois, soit 2 par semaine</p>
-          <ul class="contenu">
-            <li><strong>4 vidéos</strong> en motion design, de 10 à 15 secondes</li>
-            <li><strong>4 posts image</strong>, en visuel ou en carrousel</li>
+          <p class="prix"><b>500&nbsp;€</b> <span>HT par mois</span></p>
+          <ul>
+            <li><b>8 posts par mois</b>, soit 2 par semaine</li>
+            <li>4 vidéos en motion design, de 10 à 15 secondes</li>
+            <li>4 posts image, en visuel ou en carrousel</li>
             <li>1 réseau social au choix</li>
             <li>Légendes et hashtags rédigés</li>
             <li>1 série de retouches par contenu</li>
           </ul>
           <a class="btn btn-ligne" href="#devis" data-formule="Essentiel">Choisir Essentiel</a>
         </article>
-        <article class="formule formule-cle">
-          <p class="badge">Recommandée</p>
+        <article class="formule f-croissance">
+          <p class="recommandee">Recommandée</p>
           <h3>Croissance</h3>
-          <p class="prix"><span class="montant">800 €</span><span class="code">HT par mois</span></p>
-          <p class="rythme">12 posts par mois, soit 3 par semaine</p>
-          <ul class="contenu">
-            <li><strong>6 vidéos</strong> en motion design, de 15 à 20 secondes</li>
-            <li><strong>6 posts image</strong>, en visuel ou en carrousel</li>
+          <p class="prix"><b>800&nbsp;€</b> <span>HT par mois</span></p>
+          <ul>
+            <li><b>12 posts par mois</b>, soit 3 par semaine</li>
+            <li>6 vidéos en motion design, de 15 à 20 secondes</li>
+            <li>6 posts image, en visuel ou en carrousel</li>
             <li>2 réseaux sociaux</li>
             <li>Légendes et hashtags rédigés</li>
             <li>Programmation des publications</li>
             <li>1 série de retouches par contenu</li>
           </ul>
-          <a class="btn btn-or" href="#devis" data-formule="Croissance">Choisir Croissance</a>
+          <a class="btn btn-ligne" href="#devis" data-formule="Croissance">Choisir Croissance</a>
         </article>
-        <article class="formule">
+        <article class="formule f-premium">
           <h3>Premium</h3>
-          <p class="prix"><span class="montant">1 300 €</span><span class="code">HT par mois</span></p>
-          <p class="rythme">16 posts par mois, soit 4 par semaine</p>
-          <ul class="contenu">
-            <li><strong>8 vidéos</strong> en motion design, de 15 à 30 secondes</li>
-            <li><strong>8 posts image</strong>, en visuel ou en carrousel</li>
-            <li><strong>1 vidéo explicative</strong> de 30 secondes chaque mois</li>
+          <p class="prix"><b>1&nbsp;300&nbsp;€</b> <span>HT par mois</span></p>
+          <ul>
+            <li><b>16 posts par mois</b>, soit 4 par semaine</li>
+            <li>8 vidéos en motion design, de 15 à 30 secondes</li>
+            <li>8 posts image, en visuel ou en carrousel</li>
+            <li>1 vidéo explicative de 30 secondes chaque mois</li>
             <li>3 réseaux sociaux</li>
             <li>Légendes, hashtags et programmation</li>
             <li>Bilan mensuel des résultats</li>
@@ -284,177 +377,63 @@
       </div>
 
       <div class="carte">
-        <h3>À la carte</h3>
-        <dl class="tarifs">
-          <div><dt>Vidéo explicative de 30 secondes<span>Script, voix off, musique et bruitages</span></dt><dd>400 € HT</dd></div>
-          <div class="lancement"><dt>Offre de lancement<span>La même vidéo, pour nos 3 premiers clients</span></dt><dd>150 € HT</dd></div>
-          <div><dt>Vidéo supplémentaire<span>10 à 20 secondes, en plus d'une formule</span></dt><dd>80 € HT</dd></div>
-          <div><dt>Post image supplémentaire<span>En plus d'une formule</span></dt><dd>40 € HT</dd></div>
-        </dl>
+        <div class="lancement">
+          <p class="lancement-etiquette">Offre de lancement</p>
+          <h3>Votre vidéo explicative de 30&nbsp;secondes</h3>
+          <p class="lancement-prix"><s><span class="sr-only">au lieu de </span>400&nbsp;€&nbsp;HT</s> <b>150&nbsp;€&nbsp;HT</b></p>
+          <p>La même vidéo, pour nos 3&nbsp;premiers clients&nbsp;: script, voix off, musique et bruitages.</p>
+          <a class="btn btn-plein" href="#devis" data-formule="Vidéo explicative à la carte" data-aimant>Profiter de l'offre</a>
+        </div>
+        <div class="carte-liste">
+          <h3>À la carte</h3>
+          <ul>
+            <li><span><b>Vidéo explicative de 30 secondes</b> Script, voix off, musique et bruitages</span><span class="carte-prix">400&nbsp;€&nbsp;HT</span></li>
+            <li><span><b>Vidéo supplémentaire</b> 10 à 20 secondes, en plus d'une formule</span><span class="carte-prix">80&nbsp;€&nbsp;HT</span></li>
+            <li><span><b>Post image supplémentaire</b> En plus d'une formule</span><span class="carte-prix">40&nbsp;€&nbsp;HT</span></li>
+          </ul>
+        </div>
       </div>
-      <p class="note-offres">Prix hors taxes. Toutes les vidéos sont au format vertical 9:16, avec musique et bruitages. Un post image est un visuel fixe ou un carrousel de 5 images au plus. Les formules mensuelles demandent un engagement de 3 mois, puis se résilient avec un mois de préavis. Le calendrier des contenus est validé avec vous avant le début de chaque mois, à partir de votre logo, de vos photos et des infos sur vos produits.</p>
+      <p class="petites-lignes">Prix hors taxes. Toutes les vidéos sont au format vertical 9:16, avec musique et bruitages. Un post image est un visuel fixe ou un carrousel de 5 images au plus. Les formules mensuelles demandent un engagement de 3 mois, puis se résilient avec un mois de préavis. Le calendrier des contenus est validé avec vous avant le début de chaque mois, à partir de votre logo, de vos photos et des infos sur vos produits.</p>
     </div>
   </section>
 
-  <section class="bande bande-ombre" id="realisations">
+  <section class="projet" id="projet" data-avance>
     <div class="wrap">
-      <div class="tete">
-        <p class="surtitre">Réalisations</p>
-        <h2>Nos dernières <em>réalisations.</em></h2>
-        <p class="intro">Des vidéos en motion design pour deux entreprises d'Île-de-France : MR BONPLAN Pare-Brise, qui remplace les pare-brise à domicile, et AMK Dépannage, qui dépanne et remorque jour et nuit. Les carrousels tournent tout seuls ; touchez la vidéo du centre pour la voir en entier.</p>
-      </div>
-      <div class="clients">
-      <section class="carrousel" aria-roledescription="carrousel" aria-labelledby="c-mrbonplan" data-carrousel>
-        <div class="carrousel-tete">
-          <h3 id="c-mrbonplan">MR BONPLAN Pare-Brise</h3>
-          <p class="code">Remplacement de pare-brise · Île-de-France</p>
-        </div>
-        <ul class="anneau">
-          <li class="diapo d-centre" role="group" aria-roledescription="diapositive" aria-label="1 sur 4">
-            <a class="ecran ecran-video" href="https://www.youtube.com/shorts/jAJtCBDxtA0" target="_blank" rel="noopener" data-youtube="jAJtCBDxtA0" data-titre="Les 6 étapes d&#x27;un changement de pare-brise" aria-label="Voir la vidéo « Les 6 étapes d&#x27;un changement de pare-brise » sur YouTube">
-              <video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/mrbonplan-etapes.jpg" aria-hidden="true" tabindex="-1"><source src="realisations/apercus/mrbonplan-etapes.mp4" type="video/mp4"></video>
-              <span class="lecture" aria-hidden="true"></span>
-              <span class="duree code" aria-hidden="true">0:39</span>
-            </a>
-            <p class="legende-video"><span class="projet-titre">Les 6 étapes d&#x27;un changement de pare-brise</span><span class="code">Vidéo explicative</span></p>
-          </li>
-          <li class="diapo d-droite" role="group" aria-roledescription="diapositive" aria-label="2 sur 4" aria-hidden="true">
-            <a class="ecran ecran-video" href="https://www.youtube.com/shorts/xq9oYFA4-fk" target="_blank" rel="noopener" data-youtube="xq9oYFA4-fk" data-titre="Partout en Île-de-France" aria-label="Voir la vidéo « Partout en Île-de-France » sur YouTube" tabindex="-1">
-              <img src="realisations/xq9oYFA4-fk.jpg" alt="" width="450" height="800" loading="lazy" decoding="async">
-              <span class="lecture" aria-hidden="true"></span>
-              <span class="duree code" aria-hidden="true">0:32</span>
-            </a>
-            <p class="legende-video"><span class="projet-titre">Partout en Île-de-France</span><span class="code">Pub zone d&#x27;intervention</span></p>
-          </li>
-          <li class="diapo d-fond" role="group" aria-roledescription="diapositive" aria-label="3 sur 4" aria-hidden="true">
-            <a class="ecran ecran-video" href="https://www.youtube.com/shorts/F-TTL6jYolU" target="_blank" rel="noopener" data-youtube="F-TTL6jYolU" data-titre="Client satisfait" aria-label="Voir la vidéo « Client satisfait » sur YouTube" tabindex="-1">
-              <video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/mrbonplan-client-satisfait.jpg" aria-hidden="true" tabindex="-1"><source src="realisations/apercus/mrbonplan-client-satisfait.mp4" type="video/mp4"></video>
-              <span class="lecture" aria-hidden="true"></span>
-              <span class="duree code" aria-hidden="true">0:21</span>
-            </a>
-            <p class="legende-video"><span class="projet-titre">Client satisfait</span><span class="code">Pub avis client</span></p>
-          </li>
-          <li class="diapo d-gauche" role="group" aria-roledescription="diapositive" aria-label="4 sur 4" aria-hidden="true">
-            <div class="ecran ecran-video sans-lien">
-              <video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/mrbonplan-typo-3d.jpg" aria-hidden="true" tabindex="-1"><source src="realisations/apercus/mrbonplan-typo-3d.mp4" type="video/mp4"></video>
-              <span class="bientot code">Bientôt en entier</span>
-              <span class="duree code" aria-hidden="true">0:14</span>
-            </div>
-            <p class="legende-video"><span class="projet-titre">Une fissure sur le pare-brise ?</span><span class="code">Pub typo animée</span></p>
-          </li>
-        </ul>
-        <div class="carrousel-pied">
-          <span class="compteur code" aria-hidden="true"><span data-num>01</span> / 04</span>
-          <span class="progression" aria-hidden="true"><span></span></span>
-          <span class="carrousel-ctrl">
-            <button type="button" class="ctrl" data-prec aria-label="Vidéo précédente"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.5 2.5 5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            <button type="button" class="ctrl" data-pause aria-pressed="false" aria-label="Mettre en pause le défilement"><svg class="i-pause" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 3v10M10.5 3v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="i-lecture" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></button>
-            <button type="button" class="ctrl" data-suiv aria-label="Vidéo suivante"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 2.5 11 8l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          </span>
-        </div>
-        <p class="sr-only" aria-live="polite" data-annonce></p>
-      </section>
-      <section class="carrousel decale" aria-roledescription="carrousel" aria-labelledby="c-amk" data-carrousel>
-        <div class="carrousel-tete">
-          <h3 id="c-amk">AMK Dépannage</h3>
-          <p class="code">Dépannage et remorquage 24h/24 · Paris et Île-de-France</p>
-        </div>
-        <ul class="anneau">
-          <li class="diapo d-centre" role="group" aria-roledescription="diapositive" aria-label="1 sur 4">
-            <div class="ecran ecran-video sans-lien">
-              <video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/amk-presentation.jpg" aria-hidden="true" tabindex="-1"><source src="realisations/apercus/amk-presentation.mp4" type="video/mp4"></video>
-              <span class="bientot code">Bientôt en entier</span>
-              <span class="duree code" aria-hidden="true">0:39</span>
-            </div>
-            <p class="legende-video"><span class="projet-titre">Une panne n&#x27;a pas d&#x27;horaire</span><span class="code">Vidéo de présentation</span></p>
-          </li>
-          <li class="diapo d-droite" role="group" aria-roledescription="diapositive" aria-label="2 sur 4" aria-hidden="true">
-            <div class="ecran ecran-video sans-lien">
-              <video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/amk-bento.jpg" aria-hidden="true" tabindex="-1"><source src="realisations/apercus/amk-bento.mp4" type="video/mp4"></video>
-              <span class="bientot code">Bientôt en entier</span>
-              <span class="duree code" aria-hidden="true">0:18</span>
-            </div>
-            <p class="legende-video"><span class="projet-titre">Tous les services en un coup d&#x27;œil</span><span class="code">Pub widgets</span></p>
-          </li>
-          <li class="diapo d-fond" role="group" aria-roledescription="diapositive" aria-label="3 sur 4" aria-hidden="true">
-            <div class="ecran ecran-video sans-lien">
-              <video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/amk-pov-ecran.jpg" aria-hidden="true" tabindex="-1"><source src="realisations/apercus/amk-pov-ecran.mp4" type="video/mp4"></video>
-              <span class="bientot code">Bientôt en entier</span>
-              <span class="duree code" aria-hidden="true">0:24</span>
-            </div>
-            <p class="legende-video"><span class="projet-titre">POV : votre voiture vous lâche en pleine nuit</span><span class="code">Pub écran</span></p>
-          </li>
-          <li class="diapo d-gauche" role="group" aria-roledescription="diapositive" aria-label="4 sur 4" aria-hidden="true">
-            <div class="ecran ecran-video sans-lien">
-              <video class="apercu" muted loop playsinline preload="none" poster="realisations/apercus/amk-notifications.jpg" aria-hidden="true" tabindex="-1"><source src="realisations/apercus/amk-notifications.mp4" type="video/mp4"></video>
-              <span class="bientot code">Bientôt en entier</span>
-              <span class="duree code" aria-hidden="true">0:18</span>
-            </div>
-            <p class="legende-video"><span class="projet-titre">En panne, en pleine nuit ?</span><span class="code">Pub notifications</span></p>
-          </li>
-        </ul>
-        <div class="carrousel-pied">
-          <span class="compteur code" aria-hidden="true"><span data-num>01</span> / 04</span>
-          <span class="progression" aria-hidden="true"><span></span></span>
-          <span class="carrousel-ctrl">
-            <button type="button" class="ctrl" data-prec aria-label="Vidéo précédente"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.5 2.5 5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            <button type="button" class="ctrl" data-pause aria-pressed="false" aria-label="Mettre en pause le défilement"><svg class="i-pause" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 3v10M10.5 3v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="i-lecture" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor"/></svg></button>
-            <button type="button" class="ctrl" data-suiv aria-label="Vidéo suivante"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 2.5 11 8l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          </span>
-        </div>
-        <p class="sr-only" aria-live="polite" data-annonce></p>
-      </section>
-      </div>
-      <div class="cta-real">
-        <p>Prochaine réalisation : <span class="accent">la vôtre&nbsp;?</span></p>
-        <a class="btn btn-or" href="#devis">Demander un devis</a>
-      </div>
-      <p class="note-video">Les extraits qui tournent sont muets et hébergés sur ce site. La vidéo complète se charge depuis YouTube (Google) seulement quand vous la lancez ; YouTube peut alors déposer des cookies. <a href="confidentialite.html#videos">En savoir plus</a>. *Offre de MR BONPLAN Pare-Brise : voir conditions sur mrbonplan.com.</p>
-    </div>
-    <dialog class="lecteur-video" id="lecteur-video" aria-labelledby="lecteur-titre">
-      <h2 class="sr-only" id="lecteur-titre">Lecture de la vidéo</h2>
-      <button type="button" class="ctrl lecteur-fermer" aria-label="Fermer la vidéo"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m3.5 3.5 9 9m0-9-9 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-      <div class="lecteur-cadre"></div>
-    </dialog>
-  </section>
-
-  <section class="bande" id="projet">
-    <div class="wrap">
-      <div class="tete">
-        <p class="surtitre">Déroulé d'un projet</p>
-        <h2>De votre idée <em>à la vidéo.</em></h2>
-      </div>
+      <header class="tete">
+        <h2>De votre idée à la vidéo.</h2>
+      </header>
       <ol class="etapes">
-        <li>
-          <span class="code">Étape 1</span>
-          <h3>Vous nous présentez votre offre</h3>
-          <p>Par message, par e-mail ou par téléphone, vous nous dites ce que vous vendez et à qui.</p>
-        </li>
-        <li>
-          <span class="code">Étape 2</span>
-          <h3>Nous écrivons le script</h3>
-          <p>Nous vous proposons le texte et le déroulé de la vidéo, scène par scène. Vous validez avant l'animation.</p>
-        </li>
-        <li>
-          <span class="code">Étape 3</span>
-          <h3>Nous animons</h3>
-          <p>La vidéo prend vie dans les couleurs et le ton de votre marque, avec musique et bruitages.</p>
-        </li>
-        <li>
-          <span class="code">Étape 4</span>
-          <h3>Vous publiez</h3>
-          <p>Vous recevez la vidéo prête à publier sur vos réseaux.</p>
-        </li>
+        <li><span class="etape-num" aria-hidden="true">1</span><h3>Vous nous présentez votre offre</h3><p>Par message, par e-mail ou par téléphone, vous nous dites ce que vous vendez et à qui.</p></li>
+        <li><span class="etape-num" aria-hidden="true">2</span><h3>Nous écrivons le script</h3><p>Nous vous proposons le texte et le déroulé de la vidéo, scène par scène. Vous validez avant l'animation.</p></li>
+        <li><span class="etape-num" aria-hidden="true">3</span><h3>Nous animons</h3><p>La vidéo prend vie dans les couleurs et le ton de votre marque, avec musique et bruitages.</p></li>
+        <li><span class="etape-num" aria-hidden="true">4</span><h3>Vous publiez</h3><p>Vous recevez la vidéo prête à publier sur vos réseaux.</p></li>
       </ol>
     </div>
   </section>
 
-  <section class="bande devis" id="devis">
+  <section class="questions-section" id="questions">
+    <div class="wrap questions-in">
+      <header class="tete">
+        <h2>Vos questions, nos réponses.</h2>
+        <p>Le détail figure dans nos <a href="cgv.html">conditions générales de vente</a>. Une autre question&nbsp;? <a href="#devis">Écrivez-nous.</a></p>
+      </header>
+      <div class="faq">
+        <details name="faq"><summary><span>Est-ce que je m'engage sur la durée&nbsp;?</span><i aria-hidden="true"></i></summary><p>Pour une vidéo à la carte, non&nbsp;: vous commandez une vidéo, c'est tout. Les formules mensuelles demandent un engagement de 3 mois. Ensuite, elles se résilient par e-mail avec un mois de préavis.</p></details>
+        <details name="faq"><summary><span>Que dois-je vous fournir&nbsp;?</span><i aria-hidden="true"></i></summary><p>Votre logo, vos photos et les informations sur vos produits ou vos services. Nous écrivons le script et le calendrier des contenus&nbsp;; vous les validez avant que l'animation commence.</p></details>
+        <details name="faq"><summary><span>Combien de retouches sont incluses&nbsp;?</span><i aria-hidden="true"></i></summary><p>Vidéo explicative à la carte&nbsp;: 2 séries de retouches. Formules Essentiel et Croissance&nbsp;: 1 série par contenu. Formule Premium&nbsp;: 2 séries par contenu. Une série, c'est un envoi groupé de vos demandes de modification sur une version livrée.</p></details>
+        <details name="faq"><summary><span>Puis-je changer de formule en cours de route&nbsp;?</span><i aria-hidden="true"></i></summary><p>Oui. Vous pouvez passer à la formule supérieure à tout moment, à partir du mois suivant. Le passage à une formule inférieure est possible après les 3 premiers mois.</p></details>
+        <details name="faq"><summary><span>Comment se passe le paiement&nbsp;?</span><i aria-hidden="true"></i></summary><p>Par virement. Pour une vidéo à la carte&nbsp;: un acompte de 30&nbsp;% à la signature du devis, puis le solde à la livraison. Pour une formule mensuelle&nbsp;: le premier mois à la signature, puis chaque mois est facturé le premier jour du mois.</p></details>
+        <details name="faq"><summary><span>Les vidéos sont-elles à moi&nbsp;?</span><i aria-hidden="true"></i></summary><p>Une fois la commande payée, vous pouvez diffuser vos contenus sur vos réseaux sociaux, votre site, vos publicités en ligne et vos présentations commerciales, dans le monde entier, pendant 5 ans. Vous recevez des fichiers MP4 au format 9:16, prêts à publier.</p></details>
+        <details name="faq"><summary><span>Travaillez-vous avec les particuliers&nbsp;?</span><i aria-hidden="true"></i></summary><p>Non. Révéla travaille avec les professionnels&nbsp;: entreprises, commerçants, artisans, professions libérales et associations.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="devis" id="devis">
     <div class="wrap devis-in">
       <div class="devis-texte">
-        <p class="surtitre">Devis gratuit</p>
-        <h2>Parlons de <em>votre produit.</em></h2>
-        <p>Dites-nous ce que vous vendez. Nous vous proposons une idée de vidéo et un devis, sans engagement.</p>
+        <h2>Parlons de votre produit.</h2>
+        <p class="devis-chapo">Dites-nous ce que vous vendez. Nous vous proposons une idée de vidéo et un devis, sans engagement.</p>
         <dl class="coordonnees">
           <div>
             <dt>Téléphone</dt>
@@ -515,9 +494,9 @@
         <fieldset>
           <legend>La vidéo doit expliquer</legend>
           <div class="choix">
-            <label><input type="checkbox" id="f-q1" checked> À quoi il sert</label>
-            <label><input type="checkbox" id="f-q2"> Comment vous opérez</label>
-            <label><input type="checkbox" id="f-q3"> Pourquoi vous choisir</label>
+            <label><input type="checkbox" id="f-q1" checked> <span>À quoi il sert</span></label>
+            <label><input type="checkbox" id="f-q2"> <span>Comment vous opérez</span></label>
+            <label><input type="checkbox" id="f-q3"> <span>Pourquoi vous choisir</span></label>
           </div>
         </fieldset>
         <div class="champ">
@@ -535,7 +514,7 @@
             <input type="tel" id="f-tel" name="telephone" autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78">
           </div>
         </div>
-        <button type="submit" class="btn btn-or">Envoyer ma demande</button>
+        <button type="submit" class="btn btn-plein btn-grand">Envoyer ma demande</button>
         <p class="mention-rgpd">Votre demande est envoyée à Révéla par l'hébergeur du site, Netlify. Révéla utilise ces informations uniquement pour répondre à votre demande de devis, et les conserve au plus 3 ans après votre dernier contact. Pour y accéder, les corriger ou les faire supprimer, écrivez à revela.motion@gmail.com. <a href="confidentialite.html">En savoir plus sur vos données</a></p>
 
         <div class="resultat resultat-ok" id="envoye" hidden>
@@ -548,27 +527,33 @@
           <p id="resultat-texte">Copiez-la et envoyez-la à <b>revela.motion@gmail.com</b>, ou ouvrez directement votre messagerie.</p>
           <textarea id="f-apercu" readonly aria-label="Texte de votre demande"></textarea>
           <div class="actions">
-            <button type="button" class="btn btn-or btn-petit" id="b-copier-demande">Copier le message</button>
+            <button type="button" class="btn btn-plein btn-petit" id="b-copier-demande">Copier le message</button>
             <a class="btn btn-ligne btn-petit" id="b-mail" href="mailto:revela.motion@gmail.com">Ouvrir ma messagerie</a>
           </div>
         </div>
       </form>
     </div>
   </section>
+  <a class="cta-mobile" href="#devis">Demander un devis gratuit</a>
 </main>
 
 <footer class="pied">
   <div class="wrap pied-in">
-    <span class="marque-nom">Révéla</span>
-    <span>Studio de motion design · On explique, vous vendez.</span>
-    <nav class="pied-liens" aria-label="Informations légales">
-      <a href="mentions-legales.html">Mentions légales</a>
-      <a href="confidentialite.html">Confidentialité</a>
-      <a href="cgv.html">CGV</a>
-    </nav>
-    <span class="code">© 2026 · revela-motion.fr · @revela_motion</span>
+    <p class="pied-geant" aria-hidden="true" data-elastique>Révéla</p>
+    <div class="pied-bas">
+      <p class="pied-signature"><b>Révéla</b>, studio de motion design. On explique, vous vendez.</p>
+      <nav class="pied-liens" aria-label="Réseaux et informations légales">
+        <a href="https://www.tiktok.com/@revela_motion" target="_blank" rel="noopener">TikTok</a>
+        <a href="https://www.youtube.com/channel/UCVKpVvP5Bnnm0POOutZFrXQ" target="_blank" rel="noopener">YouTube</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="cgv.html">CGV</a>
+      </nav>
+      <p class="pied-copie">© 2026 Révéla, revela-motion.fr, @revela_motion</p>
+    </div>
   </div>
 </footer>
+
 <script src="assets/site.js" defer></script>
 </body>
 </html>

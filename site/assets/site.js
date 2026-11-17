@@ -1,262 +1,263 @@
 (function(){
-  var reduit = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function signaler(btn, texte){
-    if(!btn.dataset.label) btn.dataset.label = btn.textContent;
-    btn.textContent = texte;
-    clearTimeout(btn._t);
-    btn._t = setTimeout(function(){ btn.textContent = btn.dataset.label; }, 2200);
-  }
-  function selectionner(el){
-    if(!el) return;
-    if(typeof el.select === 'function'){ el.focus(); el.select(); return; }
-    try{
-      var r = document.createRange(); r.selectNodeContents(el);
-      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-    }catch(e){}
-  }
-  function copier(texte, btn, cible, ok, repli){
-    var echec = function(){ selectionner(cible); signaler(btn, repli); };
-    try{
-      if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(texte).then(function(){ signaler(btn, ok); }, echec);
-      } else { echec(); }
-    }catch(e){ echec(); }
+  'use strict';
+  var doc = document, racine = doc.documentElement;
+  var mq = function(q){ return window.matchMedia ? window.matchMedia(q).matches : false; };
+  var reduit = mq('(prefers-reduced-motion: reduce)');
+  var souris = mq('(hover: hover) and (pointer: fine)');
+  var IO = 'IntersectionObserver' in window;
+  function tous(sel, ctx){ return Array.prototype.slice.call((ctx || doc).querySelectorAll(sel)); }
+  function borne(v, a, b){ return v < a ? a : v > b ? b : v; }
+  function jouer(v){ v.muted = true; var p = v.play(); if(p && p.catch) p.catch(function(){}); }
+  function observer(el, seuil, f){
+    if(!IO){ f(true); return; }
+    new IntersectionObserver(function(es){ f(es[es.length - 1].isIntersecting); }, { threshold: seuil }).observe(el);
   }
 
-  document.querySelectorAll('button[data-copie]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      copier(btn.dataset.copie, btn, document.getElementById(btn.dataset.cible), 'Copié', 'Sélectionné');
+  /* ---------- Menu mobile ---------- */
+  var menu = doc.getElementById('menu'), bMenu = doc.querySelector('.menu-bouton');
+  if(menu && bMenu){
+    var fermerMenu = function(){
+      menu.classList.remove('ouvert');
+      bMenu.setAttribute('aria-expanded', 'false');
+      bMenu.setAttribute('aria-label', 'Ouvrir le menu');
+    };
+    bMenu.addEventListener('click', function(){
+      var ouvert = menu.classList.toggle('ouvert');
+      bMenu.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+      bMenu.setAttribute('aria-label', ouvert ? 'Fermer le menu' : 'Ouvrir le menu');
     });
-  });
+    menu.addEventListener('click', function(e){ if(e.target.closest('a')) fermerMenu(); });
+    doc.addEventListener('keydown', function(e){ if(e.key === 'Escape' && menu.classList.contains('ouvert')){ fermerMenu(); bMenu.focus(); } });
+    doc.addEventListener('click', function(e){ if(!e.target.closest('.entete')) fermerMenu(); });
+  }
 
-  var form = document.getElementById('form-devis');
-  var obligatoires = [
-    ['f-nom', 'Indiquez votre nom.'],
-    ['f-offre', 'Décrivez en quelques mots le produit ou le service à présenter.'],
-    ['f-email', 'Indiquez votre adresse e-mail pour que nous puissions vous répondre.']
-  ];
-  var MESSAGE_EMAIL = 'Indiquez une adresse e-mail valide, par exemple camille@exemple.fr.';
-  function val(id){ return document.getElementById(id).value.trim(); }
-  function emailValide(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+  /* ---------- Extraits muets : ils ne jouent que lorsqu'on les voit ---------- */
+  var pauseAccueil = false;
+  var autos = tous('video.auto');
+  function majAuto(v){
+    var ok = !reduit && v._vu && !doc.hidden && !(pauseAccueil && v.closest('.accueil'));
+    if(ok){ if(v.paused) jouer(v); } else if(!v.paused){ v.pause(); }
+  }
+  autos.forEach(function(v){ observer(v, .2, function(vu){ v._vu = vu; majAuto(v); }); });
+  doc.addEventListener('visibilitychange', function(){ autos.forEach(majAuto); });
 
-  obligatoires.forEach(function(o){
-    document.getElementById(o[0]).addEventListener('input', function(){
-      var err = document.getElementById(o[0] + '-err');
-      var ok = this.value.trim() && (o[0] !== 'f-email' || emailValide(this.value.trim()));
-      if(ok){ this.setAttribute('aria-invalid', 'false'); err.hidden = true; }
-    });
-  });
-
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    var premier = null;
-    obligatoires.forEach(function(o){
-      var el = document.getElementById(o[0]), err = document.getElementById(o[0] + '-err');
-      var v = el.value.trim();
-      var message = !v ? o[1] : (o[0] === 'f-email' && !emailValide(v) ? MESSAGE_EMAIL : '');
-      el.setAttribute('aria-invalid', message ? 'true' : 'false');
-      el.setAttribute('aria-describedby', o[0] + '-err');
-      err.textContent = message;
-      err.hidden = !message;
-      if(message && !premier) premier = el;
-    });
-    if(premier){ premier.focus(); return; }
-
-    var questions = [['f-q1', 'à quoi sert notre produit ou service'], ['f-q2', 'comment nous travaillons'], ['f-q3', 'pourquoi nous choisir']]
-      .filter(function(q){ return document.getElementById(q[0]).checked; })
-      .map(function(q){ return q[1]; });
-
-    var lignes = ['Bonjour Révéla,', '', 'Je souhaite un devis pour une vidéo explicative en motion design.', '', 'Nom : ' + val('f-nom')];
-    if(val('f-entreprise')) lignes.push('Entreprise : ' + val('f-entreprise'));
-    lignes.push('Produit ou service : ' + val('f-offre'));
-    var sel = document.getElementById('f-formule');
-    if(sel.value) lignes.push('Formule qui m\'intéresse : ' + sel.options[sel.selectedIndex].text);
-    if(questions.length) lignes.push('La vidéo doit expliquer : ' + questions.join(', '));
-    if(val('f-message')) lignes.push('', val('f-message'));
-    lignes.push('', 'Me répondre : ' + val('f-email') + (val('f-tel') ? ' · ' + val('f-tel') : ''), '', 'Merci !');
-
-    var corps = lignes.join('\n');
-    var sujet = 'Demande de devis Révéla · ' + (val('f-entreprise') || val('f-nom'));
-    document.getElementById('f-apercu').value = corps;
-    document.getElementById('b-mail').href = 'mailto:revela.motion@gmail.com?subject=' + encodeURIComponent(sujet) + '&body=' + encodeURIComponent(corps);
-
-    function montrer(id, titreId){
-      var bloc = document.getElementById(id);
-      bloc.hidden = false;
-      bloc.scrollIntoView({ behavior: reduit ? 'auto' : 'smooth', block: 'nearest' });
-      document.getElementById(titreId).focus({ preventScroll: true });
-    }
-
-    // Site en ligne : la demande part directement chez Révéla (Netlify Forms).
-    if(document.documentElement.getAttribute('data-form') === 'netlify'){
-      var bouton = form.querySelector('button[type=submit]');
-      var libelle = bouton.textContent;
-      bouton.disabled = true; bouton.textContent = 'Envoi en cours…';
-      document.getElementById('resultat').hidden = true;
-      var donnees = new URLSearchParams(new FormData(form));
-      donnees.delete('explications');
-      donnees.set('explications', questions.join(', ') || 'Non précisé');
-      fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: donnees.toString()
-      }).then(function(r){
-        if(!r.ok) throw new Error('HTTP ' + r.status);
-        form.querySelectorAll('input:not([type=hidden]):not([type=checkbox]), textarea, select').forEach(function(c){ c.value = ''; });
-        bouton.textContent = 'Demande envoyée';
-        montrer('envoye', 'envoye-titre');
-      }).catch(function(){
-        bouton.disabled = false; bouton.textContent = libelle;
-        document.getElementById('resultat-titre').textContent = "L'envoi n'a pas fonctionné.";
-        document.getElementById('resultat-texte').textContent = 'Votre demande est prête ci-dessous : copiez-la et envoyez-la à revela.motion@gmail.com, ou réessayez dans un instant.';
-        montrer('resultat', 'resultat-titre');
+  /* ---------- Accueil : le projecteur suit le curseur ---------- */
+  var accueil = doc.querySelector('.accueil');
+  if(accueil){
+    var projo = accueil.querySelector('.projo'), scene = accueil.querySelector('.scene-tels');
+    var bPauseAccueil = accueil.querySelector('[data-pause-accueil]');
+    var base = 118, cible = 118, angle = 118, px = 0, py = 0, cx = 0, cy = 0, suit = false, enVue = true, tourne = false;
+    var pivot = function(){ var r = projo.getBoundingClientRect(), u = r.width / 110; return [r.left + 38 * u, r.top + 52 * u]; };
+    var viser = function(){
+      var p = pivot(), s = scene.getBoundingClientRect();
+      var a = Math.atan2(s.top + s.height * .52 - p[1], s.left + s.width * .5 - p[0]) * 180 / Math.PI;
+      base = borne(a, 96, 150);
+      if(reduit){ accueil.style.setProperty('--angle', base.toFixed(2) + 'deg'); }
+    };
+    var tic = function(ts){
+      if(!enVue || pauseAccueil || reduit){ tourne = false; return; }
+      var but = suit ? cible : base + Math.sin(ts / 1800) * 2.6;
+      angle += (but - angle) * .075; px += (cx - px) * .075; py += (cy - py) * .075;
+      accueil.style.setProperty('--angle', angle.toFixed(2) + 'deg');
+      scene.style.setProperty('--px', px.toFixed(3));
+      scene.style.setProperty('--py', py.toFixed(3));
+      window.requestAnimationFrame(tic);
+    };
+    var demarrer = function(){ if(!tourne && !reduit && enVue && !pauseAccueil){ tourne = true; window.requestAnimationFrame(tic); } };
+    viser(); angle = base;
+    window.addEventListener('resize', viser);
+    window.addEventListener('load', viser);
+    if(souris && !reduit){
+      accueil.addEventListener('pointermove', function(e){
+        var p = pivot();
+        var a = Math.atan2(Math.max(e.clientY - p[1], 40), e.clientX - p[0]) * 180 / Math.PI;
+        cible = borne(a, base - 18, base + 10); suit = true;
+        var r = accueil.getBoundingClientRect();
+        cx = (e.clientX - r.left) / r.width - .5; cy = (e.clientY - r.top) / r.height - .5;
       });
-      return;
+      accueil.addEventListener('pointerleave', function(){ suit = false; cx = 0; cy = 0; });
     }
-
-    montrer('resultat', 'resultat-titre');
-  });
-
-  // Méthode : apparition au défilement, puis lecture de la frise (35 s jouées en 6,5 s, avec pause et reprise).
-  var methode = document.getElementById('methode');
-  if(methode && !reduit && 'IntersectionObserver' in window){
-    methode.classList.add('anim-prete');
-    var apparition = new IntersectionObserver(function(entrees){
-      entrees.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('vu'); apparition.unobserve(e.target); } });
-    }, { threshold: .25 });
-    methode.querySelectorAll('.tete, .trois').forEach(function(el){ apparition.observe(el); });
-
-    var anat = methode.querySelector('.anatomie'), piste = anat.querySelector('.piste');
-    var segs = Array.prototype.slice.call(piste.children);
-    var legendes = Array.prototype.slice.call(anat.querySelectorAll('.legende li'));
-    var colonnes = Array.prototype.slice.call(methode.querySelectorAll('.trois li'));
-    var zone = anat.querySelector('.piste-zone'), bulle = anat.querySelector('.bulle-lecture');
-    var bouton = anat.querySelector('[data-frise]');
-    var durees = piste.getAttribute('data-durees').split(',').map(Number), debuts = [], total = 0;
-    durees.forEach(function(d){ debuts.push(total); total += d; });
-    var LECTURE = 6500, t = 0, enCours = false, fini = false, manuel = false, dernier = null, visible = false;
-    anat.classList.add('frise-prete');
-    bouton.hidden = false;
-
-    function indice(){ for(var i = debuts.length - 1; i >= 0; i--){ if(t >= debuts[i]) return i; } return 0; }
-    function afficher(){
-      var k = fini ? -1 : indice();
-      zone.style.setProperty('--t', (t / total).toFixed(4));
-      bulle.textContent = Math.min(total, Math.floor(t)) + ' s';
-      segs.forEach(function(s, i){ s.classList.toggle('allume', fini || t >= debuts[i]); s.classList.toggle('actif', i === k); });
-      legendes.forEach(function(l, i){ l.classList.toggle('passe', fini || t >= debuts[i]); l.classList.toggle('actif', i === k); });
-      // les segments 1, 2 et 3 de la frise font briller la colonne correspondante
-      colonnes.forEach(function(c, j){ c.classList.toggle('actif', k === 3 + j); });
+    observer(accueil, 0, function(vu){ enVue = vu; demarrer(); });
+    if(bPauseAccueil){
+      if(reduit){ bPauseAccueil.hidden = true; }
+      bPauseAccueil.addEventListener('click', function(){
+        pauseAccueil = !pauseAccueil;
+        racine.classList.toggle('pause-accueil', pauseAccueil);
+        bPauseAccueil.setAttribute('aria-pressed', pauseAccueil ? 'true' : 'false');
+        bPauseAccueil.setAttribute('aria-label', pauseAccueil ? "Relancer les animations de l'accueil" : "Mettre en pause les animations de l'accueil");
+        autos.forEach(majAuto); demarrer();
+      });
     }
-    function libelle(){ bouton.textContent = enCours ? 'Pause' : (fini ? 'Rejouer la frise' : 'Reprendre'); }
-    function boucle(ts){
-      if(!enCours) return;
-      if(dernier !== null) t += (ts - dernier) / LECTURE * total;
-      dernier = ts;
-      if(t >= total){ t = total; fini = true; enCours = false; anat.classList.remove('frise-lecture'); libelle(); }
-      afficher();
-      if(enCours) window.requestAnimationFrame(boucle);
-    }
-    function lancer(){
-      if(fini){ t = 0; fini = false; }
-      enCours = true; dernier = null;
-      anat.classList.add('frise-lecture');
-      libelle();
-      window.requestAnimationFrame(boucle);
-    }
-    function arreter(){ enCours = false; libelle(); }
-    bouton.addEventListener('click', function(){ if(enCours){ arreter(); manuel = true; } else { manuel = false; lancer(); } });
-    function aller(i){
-      arreter(); manuel = true; fini = false;
-      t = debuts[i] + durees[i] / 2;
-      anat.classList.add('frise-lecture');
-      afficher(); libelle();
-    }
-    segs.forEach(function(s, i){ s.addEventListener('click', function(){ aller(i); }); });
-    legendes.forEach(function(l, i){ l.addEventListener('click', function(){ aller(i); }); });
-    // la frise repart du début chaque fois qu'on arrive dessus, et se remet à zéro quand on la quitte
-    new IntersectionObserver(function(e){
-      var dedans = e[0].isIntersecting && e[0].intersectionRatio >= .3;
-      if(dedans === visible) return;
-      visible = dedans;
-      t = 0; fini = false; manuel = false;
-      if(visible){ lancer(); }
-      else { arreter(); anat.classList.remove('frise-lecture'); afficher(); }
-    }, { threshold: [0, .3] }).observe(anat);
-    afficher();
   }
 
-  // Accueil animé au défilement : 1. le post figé défile, 2. le projecteur s'allume et l'écran devient une vidéo,
-  // 3. le téléphone prend sa place et le titre apparaît. Les étapes suivent le défilement (variables CSS --a, --b, --c).
-  var intro = document.querySelector('[data-intro]');
-  if(intro && !reduit){
-    var scene = intro.querySelector('.intro-scene'), tel = intro.querySelector('.intro-tel');
-    var video = intro.querySelector('.intro-video'), entete = document.querySelector('.entete');
-    var accroche = intro.querySelector('.intro-accroche'), texte = intro.querySelector('.hero-texte');
-    var visibleIntro = true, cFin = 0, attente = false;
-    intro.classList.add('intro-active');
-    var seg = function(p, d, f){ return Math.min(1, Math.max(0, (p - d) / (f - d))); };
-    var doux = function(t){ return t * t * (3 - 2 * t); };
-    // le scintillement de l'allumage, repris de l'animation du projecteur
-    var CLIGNE = [[0, 0], [.06, .55], [.1, .08], [.17, .8], [.23, .35], [.38, 1], [1, 1]];
-    function cligne(t){
-      for(var i = 1; i < CLIGNE.length; i++){
-        if(t <= CLIGNE[i][0]){ var a = CLIGNE[i - 1], b = CLIGNE[i]; return a[1] + (b[1] - a[1]) * (t - a[0]) / (b[0] - a[0]); }
-      }
-      return 1;
-    }
-    function mesurer(){
-      var mobile = window.innerWidth < 900;
-      intro.style.setProperty('--h-entete', entete.offsetHeight + 'px');
-      intro.classList.add('mesure');
-      var r = tel.getBoundingClientRect(), s = scene.getBoundingClientRect(), q = accroche.getBoundingClientRect();
-      intro.classList.remove('mesure');
-      // zone libre sous l'accroche pour le téléphone au départ
-      var haut = q.bottom + 20, bas = s.bottom - 64;
-      var s0 = Math.max(.5, Math.min(1.05, (bas - haut) / r.height));
-      intro.style.setProperty('--s0', s0.toFixed(3));
-      intro.style.setProperty('--s1', mobile ? '.88' : '1');
-      intro.style.setProperty('--dx', Math.round(s.left + s.width / 2 - (r.left + r.width / 2)) + 'px');
-      intro.style.setProperty('--dy', Math.round((haut + bas) / 2 - (r.top + r.height / 2)) + 'px');
-    }
-    function maj(){
-      attente = false;
-      var total = intro.offsetHeight - scene.offsetHeight;
-      var p = total > 0 ? Math.min(1, Math.max(0, -intro.getBoundingClientRect().top / total)) : 1;
-      var a = seg(p, 0, .3), b = seg(p, .3, .58), c = doux(seg(p, .58, .86));
-      cFin = c;
-      intro.style.setProperty('--a', a.toFixed(3));
-      intro.style.setProperty('--b', b.toFixed(3));
-      intro.style.setProperty('--c', c.toFixed(3));
-      intro.style.setProperty('--flick', cligne(b).toFixed(3));
-      if(video){
-        if(b > .3 && visibleIntro && !document.hidden){ var pr = video.play(); if(pr && pr.catch) pr.catch(function(){}); }
-        else {
-          if(!video.paused) video.pause();
-          if(b <= .3 && video.currentTime > 0) video.currentTime = 0;   // la gourde se redessine à chaque allumage
-        }
+  /* ---------- Surligneur : le trait jaune passe quand la phrase arrive à l'écran ---------- */
+  tous('.surligne').forEach(function(el){
+    if(reduit || !IO){ el.classList.add('vu'); return; }
+    var o = new IntersectionObserver(function(es){
+      if(es[0].isIntersecting){ el.classList.add('vu'); o.disconnect(); }
+    }, { threshold: .9, rootMargin: '0px 0px -12% 0px' });
+    o.observe(el);
+  });
+
+  /* ---------- Défilement : scène du constat, déroulé, bouton mobile ---------- */
+  var sceneConstat = doc.querySelector('[data-scene]');
+  var videoScene = sceneConstat && sceneConstat.querySelector('video');
+  var etapes = doc.querySelector('.etapes'), lesEtapes = etapes ? tous('li', etapes) : [];
+  var devis = doc.getElementById('devis'), pied = doc.querySelector('.pied');
+  if(sceneConstat && !reduit) sceneConstat.classList.add('epingle');
+  if(reduit) lesEtapes.forEach(function(li){ li.classList.add('atteint'); });
+  var attente = false;
+  function adoucir(x){ return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+  function majDefilement(){
+    attente = false;
+    var h = window.innerHeight, r;
+    if(sceneConstat && !reduit){
+      r = sceneConstat.getBoundingClientRect();
+      var p = borne(-r.top / Math.max(1, r.height - h), 0, 1);
+      var w = adoucir(borne((p - .26) / .44, 0, 1));
+      sceneConstat.style.setProperty('--w', w.toFixed(4));
+      sceneConstat.style.setProperty('--d', borne(p / .5, 0, 1).toFixed(4));
+      sceneConstat.style.setProperty('--t', borne((p - .4) / .16, 0, 1).toFixed(4));
+      var visible = r.bottom > 0 && r.top < h && !doc.hidden;
+      if(videoScene){
+        if(visible && p > .04){ if(videoScene.paused) jouer(videoScene); }
+        else if(!videoScene.paused){ videoScene.pause(); }
       }
     }
-    function demander(){ if(!attente){ attente = true; window.requestAnimationFrame(maj); } }
-    mesurer(); maj();
-    window.addEventListener('scroll', demander, { passive: true });
-    window.addEventListener('resize', function(){ mesurer(); demander(); });
-    document.addEventListener('visibilitychange', demander);
-    if('IntersectionObserver' in window){
-      new IntersectionObserver(function(e){ visibleIntro = e[0].isIntersecting; demander(); }).observe(scene);
+    if(etapes && !reduit){
+      r = etapes.getBoundingClientRect();
+      var q = borne((h * .78 - r.top) / (r.height + h * .2), 0, 1);
+      etapes.style.setProperty('--p', q.toFixed(4));
+      lesEtapes.forEach(function(li, i){ li.classList.toggle('atteint', q >= i / (lesEtapes.length - 1) - .02); });
     }
-    // au clavier, le titre et les boutons doivent être visibles : on saute à la fin de l'animation
-    texte.addEventListener('focusin', function(){
-      if(cFin < 1) window.scrollTo({ top: intro.offsetTop + intro.offsetHeight - window.innerHeight, behavior: 'auto' });
+    if(accueil && devis){
+      var passe = accueil.getBoundingClientRect().bottom < 0;
+      var surDevis = devis.getBoundingClientRect().top < h * .85;
+      racine.classList.toggle('cta-visible', passe && !surDevis);
+    }
+  }
+  function demander(){ if(!attente){ attente = true; window.requestAnimationFrame(majDefilement); } }
+  window.addEventListener('scroll', demander, { passive: true });
+  window.addEventListener('resize', demander);
+  doc.addEventListener('visibilitychange', demander);
+  if(videoScene && reduit){ videoScene.setAttribute('controls', ''); }
+  majDefilement();
+
+  /* ---------- Méthode : les trois questions en « stories » ---------- */
+  var st = doc.querySelector('[data-stories]');
+  if(st){
+    var sVids = tous('.story', st), sBarres = tous('.stories-barres span', st), sItems = tous('.questions li', st);
+    var sNom = st.querySelector('[data-story-nom]'), sPause = st.querySelector('[data-stories-pause]');
+    var si = 0, sEtat = { pause: false, visible: false };
+    var sArrete = function(){ return reduit || sEtat.pause || !sEtat.visible || doc.hidden; };
+    var sMaj = function(){
+      st.classList.toggle('arret', sArrete());
+      sVids.forEach(function(v, k){ if(k === si && !sArrete()){ if(v.paused) jouer(v); } else if(!v.paused){ v.pause(); } });
+    };
+    var sAller = function(k){
+      si = (k + sVids.length) % sVids.length;
+      sVids.forEach(function(v, j){ v.classList.toggle('actif', j === si); });
+      sItems.forEach(function(li, j){
+        li.classList.toggle('actif', j === si);
+        var b = li.querySelector('button');
+        if(j === si) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+      });
+      sBarres.forEach(function(b, j){ b.classList.remove('encours'); b.classList.toggle('fait', j < si); });
+      void sBarres[si].offsetWidth;
+      if(!reduit) sBarres[si].classList.add('encours');
+      if(sNom) sNom.textContent = sVids[si].getAttribute('data-nom');
+      try{ sVids[si].currentTime = 0; }catch(e){}
+      sMaj();
+    };
+    sBarres.forEach(function(b){ b.firstElementChild.addEventListener('animationend', function(){ sAller(si + 1); }); });
+    sItems.forEach(function(li, j){ li.querySelector('button').addEventListener('click', function(){ sAller(j); }); });
+    if(sPause){
+      if(reduit){ sPause.hidden = true; }
+      sPause.addEventListener('click', function(){
+        sEtat.pause = !sEtat.pause;
+        sPause.setAttribute('aria-pressed', sEtat.pause ? 'true' : 'false');
+        sPause.setAttribute('aria-label', sEtat.pause ? 'Relancer les extraits' : 'Mettre en pause les extraits');
+        sMaj();
+      });
+    }
+    observer(st, .35, function(vu){ sEtat.visible = vu; sMaj(); });
+    doc.addEventListener('visibilitychange', sMaj);
+    sAller(0);
+  }
+
+  /* ---------- Frise : 35 secondes jouées en 7, à chaque arrivée à l'écran ---------- */
+  var frise = doc.querySelector('[data-frise]');
+  if(frise){
+    var fSegs = tous('.seg', frise), fLeg = tous('.frise-legende li', frise);
+    var fPiste = frise.querySelector('.frise-piste'), fTemps = frise.querySelector('[data-frise-temps]'), fBouton = frise.querySelector('[data-frise-bouton]');
+    var durees = [3, 4, 3, 5, 5, 4, 4, 7], debuts = [], total = 0;
+    durees.forEach(function(d){ debuts.push(total); total += d; });
+    var ft = 0, fEnCours = false, fFini = false, fManuel = false, fDernier = 0, VITESSE = total / 7;
+    var fIndice = function(){ for(var i = debuts.length - 1; i >= 0; i--){ if(ft >= debuts[i]) return i; } return 0; };
+    var fAfficher = function(){
+      fSegs.forEach(function(s, k){ s.style.setProperty('--r', borne((ft - debuts[k]) / durees[k], 0, 1).toFixed(3)); });
+      var k = Math.min(fIndice(), fSegs.length - 1), s = fSegs[k];
+      var x = (s.offsetLeft + borne((ft - debuts[k]) / durees[k], 0, 1) * s.offsetWidth) / Math.max(1, fPiste.offsetWidth);
+      fPiste.style.setProperty('--x', x.toFixed(4));
+      fLeg.forEach(function(l, j){ l.classList.toggle('actif', j === k); });
+      var sec = Math.min(total, Math.floor(ft));
+      fTemps.textContent = (sec < 10 ? '0' : '') + sec + ' s';
+    };
+    var fLibelle = function(){ fBouton.textContent = fEnCours ? 'Pause' : (fFini || ft === 0 ? 'Rejouer la frise' : 'Reprendre'); };
+    var fBoucle = function(ts){
+      if(!fEnCours) return;
+      ft += Math.min(.1, (ts - fDernier) / 1000) * VITESSE; fDernier = ts;
+      if(ft >= total){ ft = total; fEnCours = false; fFini = true; }
+      fAfficher(); fLibelle();
+      if(fEnCours) window.requestAnimationFrame(fBoucle);
+    };
+    var fLancer = function(){
+      if(fFini || ft >= total){ ft = 0; fFini = false; }
+      fEnCours = true; fDernier = window.performance.now(); fLibelle();
+      window.requestAnimationFrame(fBoucle);
+    };
+    var fArreter = function(){ fEnCours = false; fLibelle(); };
+    var fAllerA = function(t){ ft = borne(t, 0, total); fFini = ft >= total; fArreter(); fManuel = true; fAfficher(); fLibelle(); };
+    fBouton.addEventListener('click', function(){ if(fEnCours){ fArreter(); fManuel = true; } else { fManuel = false; fLancer(); } });
+    fLeg.forEach(function(l, j){ l.querySelector('button').addEventListener('click', function(){ fAllerA(debuts[j] + .001); }); });
+    fPiste.addEventListener('click', function(e){
+      var r = fPiste.getBoundingClientRect();
+      fAllerA(borne((e.clientX - r.left) / r.width, 0, 1) * total);
+    });
+    window.addEventListener('resize', fAfficher);
+    if(reduit){ ft = total; fFini = true; }
+    fAfficher(); fLibelle();
+    if(!reduit){
+      observer(frise, .3, function(vu){
+        if(vu){ if(!fManuel && !fEnCours){ ft = 0; fFini = false; fLancer(); } }
+        else if(fEnCours){ fArreter(); }
+      });
+    }
+  }
+
+  /* ---------- Réalisations : un halo suit le curseur dans la salle ---------- */
+  var salle = doc.querySelector('[data-salle]');
+  if(salle && souris && !reduit){
+    var sx = 0, sy = 0, sAttente = false;
+    salle.addEventListener('pointermove', function(e){
+      var r = salle.getBoundingClientRect();
+      sx = e.clientX - r.left; sy = e.clientY - r.top;
+      if(!sAttente){
+        sAttente = true;
+        window.requestAnimationFrame(function(){
+          sAttente = false;
+          salle.style.setProperty('--lx', sx.toFixed(0) + 'px');
+          salle.style.setProperty('--ly', sy.toFixed(0) + 'px');
+        });
+      }
     });
   }
 
-  // Carrousels des réalisations : un anneau de 4 vidéos par client, qui tourne tout seul.
-  // Seule la vidéo du centre joue son aperçu (muet, 6 s) ; la suivante arrive à la fin de la barre de progression.
-  var lecteur = document.getElementById('lecteur-video');
+  /* ---------- Carrousels : un anneau de vidéos par client, qui tourne tout seul ---------- */
+  var lecteur = doc.getElementById('lecteur-video');
+  var integre = racine.getAttribute('data-embed') === 'youtube';
   var carrousels = [];
-  document.querySelectorAll('[data-carrousel]').forEach(function(box){
+  tous('[data-carrousel]').forEach(function(box){
     var anneau = box.querySelector('.anneau');
     var cartes = Array.prototype.slice.call(anneau.children);
     var n = cartes.length, idx = 0;
@@ -265,26 +266,20 @@
     var bPause = box.querySelector('[data-pause]');
     var etat = { pause: false, survol: false, focus: false, visible: false };
 
-    function arrete(){ return reduit || etat.pause || etat.survol || etat.focus || !etat.visible || document.hidden || (lecteur && lecteur.open); }
+    function arrete(){ return reduit || etat.pause || etat.survol || etat.focus || !etat.visible || doc.hidden || (lecteur && lecteur.open); }
     function apercus(){
       cartes.forEach(function(c, i){
         var v = c.querySelector('video');
         if(!v) return;
-        if(i === idx && !reduit && !etat.pause && etat.visible && !document.hidden && !(lecteur && lecteur.open)){
-          v.muted = true;
-          var p = v.play();
-          if(p && p.catch) p.catch(function(){});
-        } else if(!v.paused){ v.pause(); }
+        if(i === idx && !reduit && !etat.pause && etat.visible && !doc.hidden && !(lecteur && lecteur.open)){ if(v.paused) jouer(v); }
+        else if(!v.paused){ v.pause(); }
       });
     }
-    function maj(){
-      box.classList.toggle('arret', arrete());
-      apercus();
-    }
+    function maj(){ box.classList.toggle('arret', arrete()); apercus(); }
     function relancer(){
       if(reduit) return;
       box.classList.remove('joue');
-      void barre.offsetWidth;            // relance l'animation de la barre
+      void barre.offsetWidth;
       box.classList.add('joue');
     }
     function placer(nouveau, parUtilisateur){
@@ -299,14 +294,13 @@
       });
       num.textContent = (idx + 1 < 10 ? '0' : '') + (idx + 1);
       if(parUtilisateur){
-        box.classList.remove('decale');
         annonce.textContent = 'Vidéo ' + (idx + 1) + ' sur ' + n + ' : ' + cartes[idx].querySelector('.projet-titre').textContent;
       }
       relancer();
       maj();
     }
 
-    barre.addEventListener('animationend', function(){ box.classList.remove('decale'); placer(idx + 1, false); });
+    barre.addEventListener('animationend', function(){ placer(idx + 1, false); });
     box.querySelector('[data-prec]').addEventListener('click', function(){ placer(idx - 1, true); });
     box.querySelector('[data-suiv]').addEventListener('click', function(){ placer(idx + 1, true); });
     bPause.addEventListener('click', function(){
@@ -315,9 +309,9 @@
       bPause.setAttribute('aria-label', etat.pause ? 'Reprendre le défilement' : 'Mettre en pause le défilement');
       maj();
     });
-    // Pause pendant le survol à la souris et quand le clavier est dans le carrousel (pas après un simple toucher).
-    box.addEventListener('pointerenter', function(e){ if(e.pointerType === 'mouse'){ etat.survol = true; maj(); } });
-    box.addEventListener('pointerleave', function(e){ if(e.pointerType === 'mouse'){ etat.survol = false; maj(); } });
+    /* Pause au survol de l'anneau et quand le clavier est dans le carrousel (pas après un simple toucher). */
+    anneau.addEventListener('pointerenter', function(e){ if(e.pointerType === 'mouse'){ etat.survol = true; maj(); } });
+    anneau.addEventListener('pointerleave', function(e){ if(e.pointerType === 'mouse'){ etat.survol = false; maj(); } });
     box.addEventListener('focusin', function(e){
       var clavier = true;
       try{ clavier = e.target.matches(':focus-visible'); }catch(err){}
@@ -329,7 +323,7 @@
       if(e.key === 'ArrowRight'){ e.preventDefault(); placer(idx + 1, true); }
     });
 
-    // Glisser du doigt (ou de la souris) pour tourner ; un glissé n'ouvre pas la vidéo.
+    /* Glisser du doigt (ou de la souris) pour tourner ; un glissé n'ouvre pas la vidéo. */
     var x0 = null, y0 = 0, glisse = false;
     anneau.addEventListener('pointerdown', function(e){ x0 = e.clientX; y0 = e.clientY; glisse = false; });
     anneau.addEventListener('pointerup', function(e){
@@ -347,40 +341,36 @@
       var i = cartes.indexOf(c);
       if(i !== idx){ e.preventDefault(); placer(i, true); return; }
       var lien = c.querySelector('a[data-youtube]');
-      if(lien && lecteur && document.documentElement.getAttribute('data-embed') === 'youtube'){
+      if(lien && lecteur && integre && typeof lecteur.showModal === 'function'){
         e.preventDefault();
         ouvrirVideo(lien);
       }
     });
 
-    if('IntersectionObserver' in window){
-      new IntersectionObserver(function(entrees){
-        etat.visible = entrees[0].isIntersecting; maj();
-      }, { threshold: .35 }).observe(box);
-    } else { etat.visible = true; }
+    observer(box, .3, function(vu){ etat.visible = vu; maj(); });
     carrousels.push(maj);
     placer(0, false);
   });
-  document.addEventListener('visibilitychange', function(){ carrousels.forEach(function(f){ f(); }); });
+  doc.addEventListener('visibilitychange', function(){ carrousels.forEach(function(f){ f(); }); });
 
-  // Sur le site en ligne, la vidéo complète se charge depuis YouTube seulement au clic (mode confidentialité renforcée).
+  /* Sur le site en ligne, la vidéo complète se charge depuis YouTube seulement au clic (mode confidentialité renforcée). */
   var origine = null;
   function ouvrirVideo(a){
-    var f = document.createElement('iframe');
-    f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(a.dataset.youtube) + '?autoplay=1&playsinline=1&rel=0';
-    f.title = a.dataset.titre;
+    var f = doc.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(a.getAttribute('data-youtube')) + '?autoplay=1&playsinline=1&rel=0';
+    f.title = a.getAttribute('data-titre');
     f.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
     f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
     lecteur.querySelector('.lecteur-cadre').appendChild(f);
-    document.getElementById('lecteur-titre').textContent = 'Vidéo « ' + a.dataset.titre + ' »';
+    doc.getElementById('lecteur-titre').textContent = 'Vidéo « ' + a.getAttribute('data-titre') + ' »';
     origine = a;
     lecteur.showModal();
     carrousels.forEach(function(m){ m(); });
   }
   if(lecteur){
-    if(document.documentElement.getAttribute('data-embed') === 'youtube'){
-      document.querySelectorAll('a[data-youtube]').forEach(function(a){
-        a.setAttribute('aria-label', 'Lancer la vidéo « ' + a.dataset.titre + ' », chargée depuis YouTube');
+    if(integre){
+      tous('a[data-youtube]').forEach(function(a){
+        a.setAttribute('aria-label', 'Lancer la vidéo « ' + a.getAttribute('data-titre') + ' », ' + a.getAttribute('data-duree') + ', chargée depuis YouTube');
       });
     }
     lecteur.querySelector('.lecteur-fermer').addEventListener('click', function(){ lecteur.close(); });
@@ -392,12 +382,156 @@
     });
   }
 
-  document.querySelectorAll('[data-formule]').forEach(function(a){
-    a.addEventListener('click', function(){ document.getElementById('f-formule').value = a.dataset.formule; });
+  /* ---------- Boutons aimantés et grand nom élastique ---------- */
+  if(souris && !reduit){
+    tous('[data-aimant]').forEach(function(b){
+      b.addEventListener('pointermove', function(e){
+        var r = b.getBoundingClientRect();
+        b.style.setProperty('translate', ((e.clientX - r.left - r.width / 2) * .16).toFixed(1) + 'px ' + ((e.clientY - r.top - r.height / 2) * .28).toFixed(1) + 'px');
+      });
+      b.addEventListener('pointerleave', function(){ b.style.removeProperty('translate'); });
+    });
+  }
+  var geant = doc.querySelector('[data-elastique]');
+  if(geant && pied && !reduit){
+    geant.style.setProperty('--etire', '62%');
+    geant.style.setProperty('transition', 'font-stretch .7s cubic-bezier(.2,.8,.2,1)');
+    observer(geant, .6, function(vu){ if(vu) geant.style.setProperty('--etire', '125%'); else if(!souris) geant.style.setProperty('--etire', '62%'); });
+    if(souris){
+      pied.addEventListener('pointermove', function(e){
+        var r = pied.getBoundingClientRect();
+        geant.style.setProperty('--etire', (70 + 55 * borne((e.clientX - r.left) / r.width, 0, 1)).toFixed(1) + '%');
+      });
+      pied.addEventListener('pointerleave', function(){ geant.style.setProperty('--etire', '125%'); });
+    }
+  }
+
+  /* ---------- Copier un numéro ou une adresse ---------- */
+  function signaler(btn, texte){
+    if(!btn.getAttribute('data-label')) btn.setAttribute('data-label', btn.textContent);
+    btn.textContent = texte;
+    clearTimeout(btn._t);
+    btn._t = setTimeout(function(){ btn.textContent = btn.getAttribute('data-label'); }, 2200);
+  }
+  function selectionner(el){
+    if(!el) return;
+    if(typeof el.select === 'function'){ el.focus(); el.select(); return; }
+    try{
+      var r = doc.createRange(); r.selectNodeContents(el);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    }catch(e){}
+  }
+  function copier(texte, btn, cible, ok, repli){
+    var echec = function(){ selectionner(cible); signaler(btn, repli); };
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(texte).then(function(){ signaler(btn, ok); }, echec);
+      } else { echec(); }
+    }catch(e){ echec(); }
+  }
+  tous('button[data-copie]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      copier(btn.getAttribute('data-copie'), btn, doc.getElementById(btn.getAttribute('data-cible')), 'Copié', 'Sélectionné');
+    });
   });
 
-  document.getElementById('b-copier-demande').addEventListener('click', function(){
-    var zone = document.getElementById('f-apercu');
-    copier(zone.value, this, zone, 'Message copié', 'Texte sélectionné');
-  });
+  /* ---------- Formulaire de devis ---------- */
+  var form = doc.getElementById('form-devis');
+  if(form){
+    var obligatoires = [
+      ['f-nom', 'Indiquez votre nom.'],
+      ['f-offre', 'Décrivez en quelques mots le produit ou le service à présenter.'],
+      ['f-email', 'Indiquez votre adresse e-mail pour que nous puissions vous répondre.']
+    ];
+    var MESSAGE_EMAIL = 'Indiquez une adresse e-mail valide, par exemple camille@exemple.fr.';
+    var val = function(id){ return doc.getElementById(id).value.trim(); };
+    var emailValide = function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); };
+
+    tous('[data-formule]').forEach(function(a){
+      a.addEventListener('click', function(){ doc.getElementById('f-formule').value = a.getAttribute('data-formule'); });
+    });
+
+    obligatoires.forEach(function(o){
+      doc.getElementById(o[0]).addEventListener('input', function(){
+        var err = doc.getElementById(o[0] + '-err');
+        var ok = this.value.trim() && (o[0] !== 'f-email' || emailValide(this.value.trim()));
+        if(ok){ this.setAttribute('aria-invalid', 'false'); err.hidden = true; }
+      });
+    });
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var premier = null;
+      obligatoires.forEach(function(o){
+        var el = doc.getElementById(o[0]), err = doc.getElementById(o[0] + '-err');
+        var v = el.value.trim();
+        var message = !v ? o[1] : (o[0] === 'f-email' && !emailValide(v) ? MESSAGE_EMAIL : '');
+        el.setAttribute('aria-invalid', message ? 'true' : 'false');
+        el.setAttribute('aria-describedby', o[0] + '-err');
+        err.textContent = message;
+        err.hidden = !message;
+        if(message && !premier) premier = el;
+      });
+      if(premier){ premier.focus(); return; }
+
+      var questions = [['f-q1', 'à quoi sert notre produit ou service'], ['f-q2', 'comment nous travaillons'], ['f-q3', 'pourquoi nous choisir']]
+        .filter(function(q){ return doc.getElementById(q[0]).checked; })
+        .map(function(q){ return q[1]; });
+
+      var lignes = ['Bonjour Révéla,', '', 'Je souhaite un devis pour une vidéo explicative en motion design.', '', 'Nom : ' + val('f-nom')];
+      if(val('f-entreprise')) lignes.push('Entreprise : ' + val('f-entreprise'));
+      lignes.push('Produit ou service : ' + val('f-offre'));
+      var sel = doc.getElementById('f-formule');
+      if(sel.value) lignes.push('Formule qui m\'intéresse : ' + sel.options[sel.selectedIndex].text);
+      if(questions.length) lignes.push('La vidéo doit expliquer : ' + questions.join(', '));
+      if(val('f-message')) lignes.push('', val('f-message'));
+      lignes.push('', 'Me répondre : ' + val('f-email') + (val('f-tel') ? ' · ' + val('f-tel') : ''), '', 'Merci !');
+
+      var corps = lignes.join('\n');
+      var sujet = 'Demande de devis Révéla · ' + (val('f-entreprise') || val('f-nom'));
+      doc.getElementById('f-apercu').value = corps;
+      doc.getElementById('b-mail').href = 'mailto:revela.motion@gmail.com?subject=' + encodeURIComponent(sujet) + '&body=' + encodeURIComponent(corps);
+
+      function montrer(id, titreId){
+        var bloc = doc.getElementById(id);
+        bloc.hidden = false;
+        bloc.scrollIntoView({ behavior: reduit ? 'auto' : 'smooth', block: 'nearest' });
+        doc.getElementById(titreId).focus({ preventScroll: true });
+      }
+
+      /* Site en ligne : la demande part directement chez Révéla (Netlify Forms). */
+      if(racine.getAttribute('data-form') === 'netlify'){
+        var bouton = form.querySelector('button[type=submit]');
+        var libelle = bouton.textContent;
+        bouton.disabled = true; bouton.textContent = 'Envoi en cours…';
+        doc.getElementById('resultat').hidden = true;
+        var donnees = new URLSearchParams(new FormData(form));
+        donnees.delete('explications');
+        donnees.set('explications', questions.join(', ') || 'Non précisé');
+        fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: donnees.toString()
+        }).then(function(r){
+          if(!r.ok) throw new Error('HTTP ' + r.status);
+          tous('input:not([type=hidden]):not([type=checkbox]), textarea, select', form).forEach(function(c){ c.value = ''; });
+          bouton.textContent = 'Demande envoyée';
+          montrer('envoye', 'envoye-titre');
+        }).catch(function(){
+          bouton.disabled = false; bouton.textContent = libelle;
+          doc.getElementById('resultat-titre').textContent = "L'envoi n'a pas fonctionné.";
+          doc.getElementById('resultat-texte').textContent = 'Votre demande est prête ci-dessous : copiez-la et envoyez-la à revela.motion@gmail.com, ou réessayez dans un instant.';
+          montrer('resultat', 'resultat-titre');
+        });
+        return;
+      }
+
+      montrer('resultat', 'resultat-titre');
+    });
+
+    doc.getElementById('b-copier-demande').addEventListener('click', function(){
+      var zone = doc.getElementById('f-apercu');
+      copier(zone.value, this, zone, 'Message copié', 'Texte sélectionné');
+    });
+  }
 })();
